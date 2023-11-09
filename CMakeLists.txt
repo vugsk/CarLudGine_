@@ -18,6 +18,10 @@ else()
     set(PD_OR_N_CURSES ${CURSES_LIBRARIES})
 endif()
 
+## Boost
+set(Boost_USE_STATIC_LIBS ON)
+find_package(Boost REQUIRED COMPONENTS)
+
 ## Nlohmann json
 find_package(nlohmann_json 3.2.0 REQUIRED)
 
@@ -25,15 +29,19 @@ find_package(nlohmann_json 3.2.0 REQUIRED)
 find_package(yaml-cpp REQUIRED)
 include_directories(${YAML_CPP_INCLUDE_DIRS})
 
-configure_file(
- ./text.yml
- ${CMAKE_CURRENT_BINARY_DIR}/text.yml
+## OpenAL
+include(FetchContent)
+FetchContent_Declare(
+        openalpp
+        GIT_REPOSITORY https://github.com/Laguna1989/OpenALpp.git
+        GIT_TAG master
 )
+FetchContent_MakeAvailable(openalpp)
 
-configure_file(
- ./Setting_game.json
- ${CMAKE_CURRENT_BINARY_DIR}/Setting_game.json
-)
+#configure_file(
+#    ./Setting_game.json
+#    ${CMAKE_CURRENT_BINARY_DIR}/Setting_game.json
+#)
 
 include_directories(include/CarLudGine)
 file(GLOB SRC_ROOT src/main.cpp)
@@ -52,17 +60,24 @@ file(GLOB SRC_CURSESCPP
 
 
 
-add_executable(CarLudGine ${SRC_ROOT} ${SRC_CURSESCPP}
-        include/CarLudGine/ParserJsonFiles.hpp
-               src/Module/ParserFiles/ParserJsonFiles.cpp
-        src/Module/ParserFiles/ParserYamlFiles.cpp
-        include/CarLudGine/ParserYamlFiles.hpp)
+add_executable( CarLudGine ${SRC_ROOT} ${SRC_CURSESCPP}
+                include/CarLudGine/ParserJsonFiles.hpp
+                src/Module/ParserFiles/ParserJsonFiles.cpp
+                src/Module/ParserFiles/ParserYamlFiles.cpp
+                include/CarLudGine/ParserYamlFiles.hpp
+                src/Module/ParserFiles/ParserIniFiles.cpp
+                include/CarLudGine/ParserIniFiles.hpp
+                src/Module/SoundControll/SoungControl.cpp
+                include/CarLudGine/SoungControl.hpp
+)
 
 # target_include_directories(CarLudGine PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 target_link_libraries(CarLudGine
-        ${PD_OR_N_CURSES}
-        ${nlohmann_LIB}
-        ${YAML_CPP_LIBRARIES}
+    OpenALpp_Lib
+    ${PD_OR_N_CURSES}
+    ${nlohmann_LIB}
+    ${YAML_CPP_LIBRARIES}
+    ${Boost_INCLUDE}
 )
 
 ## building project

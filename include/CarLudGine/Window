@@ -1,0 +1,59 @@
+
+#pragma once
+
+#include <cstddef>
+#include <curses.h> 
+
+
+namespace clg_cursescpp {
+
+  template<typename T>
+  struct PairNum {
+    T _x;
+    T _y;
+  };
+
+
+
+  template<typename T1, typename T2>
+  PairNum<T1> convertStructPairNum(PairNum<T2> data);
+
+  template<typename T1, typename T2>
+  T1 convertTypeData(T2 data);
+
+  class Window {
+    protected:
+      WINDOW* _win;
+      PairNum<short> _xy; 
+      
+      
+    public:
+      static const PairNum<short> SCREEN_XY;
+
+      Window(const Window &);
+      Window(Window &&other) = delete;
+      Window &operator=(const Window &);
+      Window &operator=(Window &&) noexcept;
+
+      Window();
+      Window(const PairNum<short> xy,
+            WINDOW* window = stdscr);
+      virtual ~Window();
+
+      void box(const unsigned a, 
+                const unsigned b);
+      int getChar();
+      void close();
+      void refresh();
+      virtual void update();
+
+      Window* createWindow(
+            const PairNum<int> xy, 
+            const PairNum<int> widthAndLength);
+
+  };
+
+
+
+
+}

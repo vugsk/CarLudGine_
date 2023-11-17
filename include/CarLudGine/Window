@@ -2,11 +2,10 @@
 #pragma once
 
 #include <curses.h> 
-#include <functional>
-#include <string>
-
 
 namespace clg_cursescpp {
+
+  typedef WINDOW* WIN;
 
   template<typename T>
   struct PairNum {
@@ -26,7 +25,7 @@ namespace clg_cursescpp {
     protected:
       static const PairNum<int> NULL_XY;
 
-      WINDOW* _win;
+      WIN _win;
       PairNum<short> _xy; 
     
       inline void print(const char *text, va_list args, 
@@ -39,7 +38,8 @@ namespace clg_cursescpp {
       Window &operator=(Window &&) noexcept;
 
       Window();
-      Window(const PairNum<short> xy, WINDOW* window);
+      Window(const Window* window);
+      Window(const PairNum<short> xy, WIN window);
       virtual ~Window();
 
       void box(const unsigned a, 
@@ -59,25 +59,14 @@ namespace clg_cursescpp {
           const char* text, ...);
       void printWin(const char* text, ...);
 
-      template<typename F>
-      void textSelection(
-          size_t sizeTextArrayForMenu,
-          std::function<F> updateFunc);
-      
-      template<typename F1, typename F2>
-      void textSelectionTable(
-          size_t sizeFirstArray, size_t sizeSecondArray,
-          std::function<F1> updateFuncRunInLoopFirstArray,
-          std::function<F2> updateFuncRunInLoopSecondArray);
-
       virtual void textSelectionTable();
       virtual void textSelection();
       virtual void update();
 
-      Window* createWindow(
+      Window createWindow(
             const PairNum<int> xy, 
             const PairNum<int> widthAndLength);
-
+      
   };
 
 

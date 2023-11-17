@@ -81,36 +81,20 @@ void clg_cursescpp::Window::printWin(const char* text, ...)
     va_end(args);
 }
 
-
-template<typename F>
-void clg_cursescpp::Window::textSelection(
-    size_t sizeTextArrayForMenu,
-    std::function<F> updateFunc)
-{
-    for (size_t i = 0; i < sizeTextArrayForMenu; i++) updateFunc();
-}
-
-template<typename F1, typename F2>
-void clg_cursescpp::Window::textSelectionTable(
-    size_t sizeFirstArray, size_t sizeSecondArray,
-    std::function<F1> updateFuncRunInLoopFirstArray,
-    std::function<F2> updateFuncRunInLoopSecondArray)
-{
-    for (size_t i = 0; i < sizeFirstArray; i++)
-    {
-        textSelection(sizeSecondArray, updateFuncRunInLoopSecondArray);
-        updateFuncRunInLoopFirstArray();
-    }
-}
-
-
-clg_cursescpp::Window* clg_cursescpp::Window::createWindow(
+clg_cursescpp::Window clg_cursescpp::Window::createWindow(
     const PairNum<int> xy,
     const PairNum<int> widthAndLength)
 {
-    return new Window(convertStructPairNum<short>(xy), 
+    return Window(convertStructPairNum<short>(xy), 
         newwin(xy._y, xy._x, widthAndLength._y, widthAndLength._x));
 }
+
+
+/*
+
+    Virtual methed
+
+*/
 
 
 void clg_cursescpp::Window::textSelectionTable() {}
@@ -118,9 +102,21 @@ void clg_cursescpp::Window::textSelection() {}
 void clg_cursescpp::Window::update() {}
 
 
+/*
+
+    Constructer
+
+*/
+
+
 clg_cursescpp::Window::Window() 
     : _win(stdscr)
     , _xy(convertStructPairNum<short>(getMaxXY()))
+{
+
+}
+
+clg_cursescpp::Window::Window(const Window* window)
 {
 
 }

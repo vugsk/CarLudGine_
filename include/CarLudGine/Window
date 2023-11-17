@@ -1,8 +1,9 @@
 
 #pragma once
 
-#include <cstddef>
 #include <curses.h> 
+#include <functional>
+#include <string>
 
 
 namespace clg_cursescpp {
@@ -13,31 +14,32 @@ namespace clg_cursescpp {
     T _y;
   };
 
-
-
   template<typename T1, typename T2>
   PairNum<T1> convertStructPairNum(PairNum<T2> data);
 
   template<typename T1, typename T2>
   T1 convertTypeData(T2 data);
 
+
+
   class Window {
     protected:
+      static const PairNum<int> NULL_XY;
+
       WINDOW* _win;
       PairNum<short> _xy; 
-      
-      
-    public:
-      static const PairNum<short> SCREEN_XY;
+    
+      inline void print(const char *text, va_list args, 
+          PairNum<int> xy = NULL_XY);
 
+    public:
       Window(const Window &);
       Window(Window &&other) = delete;
       Window &operator=(const Window &);
       Window &operator=(Window &&) noexcept;
 
       Window();
-      Window(const PairNum<short> xy,
-            WINDOW* window = stdscr);
+      Window(const PairNum<short> xy, WINDOW* window);
       virtual ~Window();
 
       void box(const unsigned a, 
@@ -45,6 +47,31 @@ namespace clg_cursescpp {
       int getChar();
       void close();
       void refresh();
+
+      int getMaxX();
+      int getMaxY();
+      PairNum<int> getMaxXY();
+
+      short getX();
+      short getY();
+
+      void movePrintWin(PairNum<int> xy, 
+          const char* text, ...);
+      void printWin(const char* text, ...);
+
+      template<typename F>
+      void textSelection(
+          size_t sizeTextArrayForMenu,
+          std::function<F> updateFunc);
+      
+      template<typename F1, typename F2>
+      void textSelectionTable(
+          size_t sizeFirstArray, size_t sizeSecondArray,
+          std::function<F1> updateFuncRunInLoopFirstArray,
+          std::function<F2> updateFuncRunInLoopSecondArray);
+
+      virtual void textSelectionTable();
+      virtual void textSelection();
       virtual void update();
 
       Window* createWindow(

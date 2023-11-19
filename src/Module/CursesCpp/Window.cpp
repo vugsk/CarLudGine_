@@ -5,7 +5,11 @@
 #include <cstring>
 #include <cwchar>
 
+/*
 
+    NULL values
+
+*/
 
 const clg_cursescpp::PairNum<int> clg_cursescpp::NULL_XY = {
     0, 0
@@ -18,6 +22,13 @@ const clg_cursescpp::TextXY clg_cursescpp::NULL_TEXT_XY = {
 clg_cursescpp::PairNum<clg_cursescpp::__int16> clg_cursescpp::MAX_SCREEN_XY = {
     0, 0
 };
+
+
+/*
+
+    Convert type data
+
+*/
 
 template <typename T1, typename T2>
 clg_cursescpp::PairNum<T1> clg_cursescpp::convertStructPairNum(PairNum<T2> data)
@@ -38,6 +49,13 @@ const wchar_t* clg_cursescpp::converterCharInWchar(const char* ch)
     mbstowcs (wc, ch, cSize);
     return wc;
 }
+
+
+/*
+
+    Initalizate screen and X, Y - screen
+
+*/
 
 void clg_cursescpp::initScreen()
 {
@@ -63,6 +81,12 @@ void clg_cursescpp::initScreen()
 
 */
 
+/*
+
+    get
+
+*/
+
 inline const char* clg_cursescpp::Window::getTitle() {
     return _title;
 }
@@ -70,6 +94,13 @@ inline const char* clg_cursescpp::Window::getTitle() {
 inline clg_cursescpp::pWIN clg_cursescpp::Window::getWindow() {
     return _win;
 }
+
+
+/*
+
+    Print and createWindow
+
+*/
 
 inline void clg_cursescpp::Window::print(const char *text, va_list args, 
     clg_cursescpp::PairNum<int> xy)
@@ -92,10 +123,22 @@ inline clg_cursescpp::pWIN clg_cursescpp::Window::createWindow(
 
 */
 
+/*
+
+    get
+
+*/
+
 inline clg_cursescpp::__int16 clg_cursescpp::Window::getX() { return _xy._x; }
 inline clg_cursescpp::__int16 clg_cursescpp::Window::getY() { return _xy._y; }
 inline void clg_cursescpp::Window::close() { delwin(_win); }
 
+
+/*
+
+    Print
+
+*/
 
 void clg_cursescpp::Window::movePrintWin(PairNum<int> xy, const char* text, ...)
 {

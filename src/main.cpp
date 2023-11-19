@@ -1,40 +1,23 @@
 
 #include <Window>
-#include <iostream>
 
-class NewWin: public clg_cursescpp::Window {
+using namespace clg_cursescpp;
+
+class MainWin : public Window
+{
     public:
-        NewWin(const clg_cursescpp::Window &other)
-            : clg_cursescpp::Window(other) {}
-        
-        void update() override {
-            printWin("lol");
-        }
+        MainWin(PairNum<int> xy, PairNum<int> lw, TextXY title = NULL_TEXT_XY)
+            : Window(xy, lw, title) {}
 
-        void textSelection() override {
-            
-        }
-    
 };
 
 int main()
 {
-    initscr();
-    clg_cursescpp::Window win;
-    win.box(0, 0);
-    win.update();
+    initScreen();
+
+    MainWin win({50, 10}, {25, 5});
+
     win.movePrintWin({10, 5}, "text");
-    win.getChar();
-    win.refresh();
-
-    NewWin test(win.createWindow(
-        {50, 10},
-        {(win.getX()/2)-25, (win.getY()/2)-5}
-    ));
-
-    test.box(0, 0);
-    test.update();
-    test.getChar();
 
     return 0;
 }

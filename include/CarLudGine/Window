@@ -4,14 +4,29 @@
 #include <curses.h> 
 
 namespace clg_cursescpp {
-
-  typedef WINDOW* WIN;
+  typedef WINDOW* pWIN;
+  typedef short    __int16;
+  typedef unsigned __int32_u;
+  
+  void initScreen(); 
 
   template<typename T>
-  struct PairNum {
+  struct PairNum
+  {
+    PairNum(T a, T b): _x(a), _y(b) {}
     T _x;
     T _y;
   };
+
+  struct TextXY
+  {
+    const char* _text;
+    bool isTopOrDownWindow;
+  };
+  
+  extern const PairNum<int> NULL_XY;
+  extern const TextXY NULL_TEXT_XY;
+  extern PairNum<__int16> MAX_SCREEN_XY;
 
   template<typename T1, typename T2>
   PairNum<T1> convertStructPairNum(PairNum<T2> data);
@@ -19,56 +34,42 @@ namespace clg_cursescpp {
   template<typename T1, typename T2>
   T1 convertTypeData(T2 data);
 
+  const wchar_t* converterCharInWchar(const char* ch);
 
 
-  class Window {
-    protected:
-      static const PairNum<int> NULL_XY;
-
-      WIN _win;
-      PairNum<short> _xy; 
-    
-      inline void print(const char *text, va_list args, 
-          PairNum<int> xy = NULL_XY);
-
+  class Window
+  {
     public:
       Window(const Window &);
-      Window(Window &&other) = delete;
+      Window(Window &&) noexcept = delete;
       Window &operator=(const Window &);
       Window &operator=(Window &&) noexcept;
-
-      Window();
-      Window(const Window* window);
-      Window(const PairNum<short> xy, WIN window);
+      Window(PairNum<int> xy, PairNum<int> lw, 
+        const TextXY title = NULL_TEXT_XY);
       virtual ~Window();
 
-      void box(const unsigned a, 
-                const unsigned b);
-      int getChar();
-      void close();
-      void refresh();
-
-      int getMaxX();
-      int getMaxY();
-      PairNum<int> getMaxXY();
-
-      short getX();
-      short getY();
+      inline void close();
+      inline __int16 getX();
+      inline __int16 getY();
 
       void movePrintWin(PairNum<int> xy, 
-          const char* text, ...);
+        const char* text, ...);
       void printWin(const char* text, ...);
 
-      virtual void textSelectionTable();
-      virtual void textSelection();
-      virtual void update();
+    protected:
+      inline void print(const char *text, va_list args, 
+        const PairNum<int> xy = NULL_XY);
+      inline pWIN createWindow(const PairNum<int> xy, 
+        const PairNum<int> lw);
+      inline const char* getTitle();
+      inline pWIN getWindow();
+    
+    private:
+      pWIN             _win;
+      PairNum<__int16> _xy;
+      const char*      _title;
 
-      Window createWindow(
-            const PairNum<int> xy, 
-            const PairNum<int> widthAndLength);
-      
   };
-
 
 
 

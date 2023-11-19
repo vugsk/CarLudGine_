@@ -1,9 +1,26 @@
 
 #include "Window"
 
+#include <cstdlib>
+#include <cstring>
+#include <cwchar>
+
+
+
+const clg_cursescpp::PairNum<int> clg_cursescpp::NULL_XY = {
+    0, 0
+};
+
+const clg_cursescpp::TextXY clg_cursescpp::NULL_TEXT_XY = {
+    "", 0
+};
+
+clg_cursescpp::PairNum<clg_cursescpp::__int16> clg_cursescpp::MAX_SCREEN_XY = {
+    0, 0
+};
 
 template <typename T1, typename T2>
-clg_cursescpp::PairNum<T1> clg_cursescpp::convertStructPairNum(clg_cursescpp::PairNum<T2> data)
+clg_cursescpp::PairNum<T1> clg_cursescpp::convertStructPairNum(PairNum<T2> data)
 {
   return {static_cast<T1>(data._x), static_cast<T1>(data._y)};
 }
@@ -14,7 +31,24 @@ T1 clg_cursescpp::convertTypeData(T2 data)
     return static_cast<T1>(data);
 }
 
+const wchar_t* clg_cursescpp::converterCharInWchar(const char* ch)
+{
+    size_t cSize = strlen(ch)+1;
+    wchar_t* wc = new wchar_t[cSize];
+    mbstowcs (wc, ch, cSize);
+    return wc;
+}
 
+void clg_cursescpp::initScreen()
+{
+    ::initscr();
+
+    MAX_SCREEN_XY = {
+        convertTypeData<__int16>(getmaxx(stdscr)), 
+        convertTypeData<__int16>(getmaxy(stdscr))
+    };
+
+}
 
 
 /*
@@ -23,13 +57,19 @@ T1 clg_cursescpp::convertTypeData(T2 data)
 
 */
 
-
 /*
-    Private
+
+    Protected
+
 */
 
+inline const char* clg_cursescpp::Window::getTitle() {
+    return _title;
+}
 
-const clg_cursescpp::PairNum<int> clg_cursescpp::Window::NULL_XY = {0, 0};
+inline clg_cursescpp::pWIN clg_cursescpp::Window::getWindow() {
+    return _win;
+}
 
 inline void clg_cursescpp::Window::print(const char *text, va_list args, 
     clg_cursescpp::PairNum<int> xy)
@@ -39,33 +79,25 @@ inline void clg_cursescpp::Window::print(const char *text, va_list args,
     wrefresh(_win);
 }
 
-
-/*
-    Public
-*/
-
-short clg_cursescpp::Window::getX() { return _xy._x; }
-short clg_cursescpp::Window::getY() { return _xy._y; }
-
-int clg_cursescpp::Window::getMaxX() { return getmaxx(_win); }
-int clg_cursescpp::Window::getMaxY() { return getmaxy(_win); }
-
-clg_cursescpp::PairNum<int> clg_cursescpp::Window::getMaxXY()
-{ 
-    return { 
-        getMaxX(), 
-        getMaxY() 
-    };
+inline clg_cursescpp::pWIN clg_cursescpp::Window::createWindow(
+    const PairNum<int> xy,
+    const PairNum<int> widthAndLength)
+{
+    return ::newwin(xy._y, xy._x, widthAndLength._y, widthAndLength._x);
 }
 
-int clg_cursescpp::Window::getChar() { return wgetch(_win); }
-void clg_cursescpp::Window::box(const unsigned a, const unsigned b) { ::box(_win, a, b); }
-void clg_cursescpp::Window::close() { delwin(_win); }
-void clg_cursescpp::Window::refresh() { wrefresh(_win); }
+/*
+
+    Public
+
+*/
+
+inline clg_cursescpp::__int16 clg_cursescpp::Window::getX() { return _xy._x; }
+inline clg_cursescpp::__int16 clg_cursescpp::Window::getY() { return _xy._y; }
+inline void clg_cursescpp::Window::close() { delwin(_win); }
 
 
-void clg_cursescpp::Window::movePrintWin(clg_cursescpp::PairNum<int> xy, 
-    const char* text, ...)
+void clg_cursescpp::Window::movePrintWin(PairNum<int> xy, const char* text, ...)
 {
     va_list args;
     va_start(args, text);
@@ -81,25 +113,6 @@ void clg_cursescpp::Window::printWin(const char* text, ...)
     va_end(args);
 }
 
-clg_cursescpp::Window clg_cursescpp::Window::createWindow(
-    const PairNum<int> xy,
-    const PairNum<int> widthAndLength)
-{
-    return Window(convertStructPairNum<short>(xy), 
-        newwin(xy._y, xy._x, widthAndLength._y, widthAndLength._x));
-}
-
-
-/*
-
-    Virtual methed
-
-*/
-
-
-void clg_cursescpp::Window::textSelectionTable() {}
-void clg_cursescpp::Window::textSelection() {}
-void clg_cursescpp::Window::update() {}
 
 
 /*
@@ -109,24 +122,29 @@ void clg_cursescpp::Window::update() {}
 */
 
 
-clg_cursescpp::Window::Window() 
-    : _win(stdscr)
-    , _xy(convertStructPairNum<short>(getMaxXY()))
+clg_cursescpp::Window::Window(PairNum<int> xy, PairNum<int> lw, const TextXY title) 
+    : _xy(convertStructPairNum<__int16>(xy))
+    , _win(createWindow(xy, lw))
 {
+    ::box(_win, 0, 0);
+
+    if (!strlen(title._text)) {
+        __int16 x = convertTypeData<__int16>((_xy._x / 2) - 
+            (std::wcslen(converterCharInWchar(title._text)) / 2));
+        
+        if (title.isTopOrDownWindow)
+        {
+            movePrintWin({x, 0}, title._text);
+        }
+        
+        else
+        {
+            movePrintWin({x, _xy._y}, title._text);
+        }
+    }
 
 }
 
-clg_cursescpp::Window::Window(const Window* window)
-{
-
-}
-
-clg_cursescpp::Window::Window(const PairNum<short> xy, WINDOW* window)
-    : _win(window)
-    , _xy(xy)
-{
-
-}
 
 clg_cursescpp::Window::~Window()
 {

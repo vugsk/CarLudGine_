@@ -2,9 +2,6 @@
 #include <ControlKeyboardAndMaus>
 #include <Window>
 
-#include <iostream>
-
-
 using namespace clg_cursescpp;
 
 class MainWin : public Window, public ControlKeyboard
@@ -28,11 +25,7 @@ class MainWin : public Window, public ControlKeyboard
 
 void test(MainWin* win) {
 
-    // std::cout << win.getX() << "dksfla\n";
-
-    
-    win->printWin("jdfl");
-    
+    win->printWin("jdfl");    
 
 }
 

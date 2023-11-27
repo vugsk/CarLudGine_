@@ -1,41 +1,11 @@
 
 #pragma once
 
-#include <curses.h> 
+#include "Config"
 
 namespace clg_cursescpp {
-  typedef WINDOW* pWIN;
-  typedef short    __int16;
-  typedef unsigned __int32_u;
   
-  void initScreen(); 
-
-  template<typename T>
-  struct PairNum
-  {
-    PairNum(T a, T b): _x(a), _y(b) {}
-    T _x;
-    T _y;
-  };
-
-  struct TextXY
-  {
-    const char* _text;
-    bool isTopOrDownWindow;
-  };
-  
-  extern const PairNum<int> NULL_XY;
-  extern const TextXY NULL_TEXT_XY;
-  extern PairNum<__int16> MAX_SCREEN_XY;
-
-  template<typename T1, typename T2>
-  PairNum<T1> convertStructPairNum(PairNum<T2> data);
-
-  template<typename T1, typename T2>
-  T1 convertTypeData(T2 data);
-
-  const wchar_t* converterCharInWchar(const char* ch);
-
+  void initScreen(const bool keypad);
 
   class Window
   {
@@ -44,12 +14,11 @@ namespace clg_cursescpp {
       Window(Window &&) noexcept = delete;
       Window &operator=(const Window &);
       Window &operator=(Window &&) noexcept;
-      Window(PairNum<int> xy, PairNum<int> lw, 
-        const TextXY title = NULL_TEXT_XY);
+      Window(PairNum<int> xy, PairNum<int> lw);
       virtual ~Window();
 
-      inline void close();
-      inline __int16 getX();
+      void close();
+      __int16 getX();
       inline __int16 getY();
 
       void movePrintWin(PairNum<int> xy, 
@@ -61,16 +30,12 @@ namespace clg_cursescpp {
         const PairNum<int> xy = NULL_XY);
       inline pWIN createWindow(const PairNum<int> xy, 
         const PairNum<int> lw);
-      inline const char* getTitle();
-      inline pWIN getWindow();
+      pWIN getWindow();
     
     private:
       pWIN             _win;
       PairNum<__int16> _xy;
-      const char*      _title;
 
   };
-
-
 
 }

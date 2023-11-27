@@ -36,13 +36,18 @@ find_package(nlohmann_json 3.2.0 REQUIRED)
 # )
 
 include_directories(include/CarLudGine)
-file(GLOB SRC_ROOT src/*.cpp)
-file(GLOB SRC_CURSESCPP src/Module/CursesCpp/Window.cpp)
+file(GLOB SRC_ROOT src/main.cpp)
+file(GLOB SRC_CURSESCPP 
+    src/Module/CursesCpp/*.cpp
+)
 
 # set(SRC_ROOT 
-#     src/MainWindow.cpp 
-#     src/MainWindow.cpp
-#     src/ConverterTypeData.cpp
+#     src/main.cpp
+# )
+
+# set(SRC_CURSESCPP
+#     src/Module/CursesCpp/Window.cpp
+#     src/Module/CursesCpp/Config.cpp
 # )
 
 add_executable(CarLudGine ${SRC_ROOT} ${SRC_CURSESCPP})

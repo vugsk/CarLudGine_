@@ -1,55 +1,6 @@
 
 #include "Window"
-
-#include <cstdlib>
-#include <cstring>
-#include <cwchar>
-
-/*
-
-    NULL values
-
-*/
-
-const clg_cursescpp::PairNum<int> clg_cursescpp::NULL_XY = {
-    0, 0
-};
-
-const clg_cursescpp::TextXY clg_cursescpp::NULL_TEXT_XY = {
-    "", 0
-};
-
-clg_cursescpp::PairNum<clg_cursescpp::__int16> clg_cursescpp::MAX_SCREEN_XY = {
-    0, 0
-};
-
-
-/*
-
-    Convert type data
-
-*/
-
-template <typename T1, typename T2>
-clg_cursescpp::PairNum<T1> clg_cursescpp::convertStructPairNum(PairNum<T2> data)
-{
-  return {static_cast<T1>(data._x), static_cast<T1>(data._y)};
-}
-
-template<typename T1, typename T2>
-T1 clg_cursescpp::convertTypeData(T2 data)
-{
-    return static_cast<T1>(data);
-}
-
-const wchar_t* clg_cursescpp::converterCharInWchar(const char* ch)
-{
-    size_t cSize = strlen(ch)+1;
-    wchar_t* wc = new wchar_t[cSize];
-    mbstowcs (wc, ch, cSize);
-    return wc;
-}
-
+#include <curses.h>
 
 /*
 
@@ -57,9 +8,10 @@ const wchar_t* clg_cursescpp::converterCharInWchar(const char* ch)
 
 */
 
-void clg_cursescpp::initScreen()
+void clg_cursescpp::initScreen(const bool keypad)
 {
     ::initscr();
+    ::keypad(stdscr, keypad);
 
     MAX_SCREEN_XY = {
         convertTypeData<__int16>(getmaxx(stdscr)), 
@@ -87,11 +39,7 @@ void clg_cursescpp::initScreen()
 
 */
 
-inline const char* clg_cursescpp::Window::getTitle() {
-    return _title;
-}
-
-inline clg_cursescpp::pWIN clg_cursescpp::Window::getWindow() {
+clg_cursescpp::pWIN clg_cursescpp::Window::getWindow() {
     return _win;
 }
 
@@ -129,9 +77,9 @@ inline clg_cursescpp::pWIN clg_cursescpp::Window::createWindow(
 
 */
 
-inline clg_cursescpp::__int16 clg_cursescpp::Window::getX() { return _xy._x; }
+clg_cursescpp::__int16 clg_cursescpp::Window::getX() { return _xy._x; }
 inline clg_cursescpp::__int16 clg_cursescpp::Window::getY() { return _xy._y; }
-inline void clg_cursescpp::Window::close() { delwin(_win); }
+void clg_cursescpp::Window::close() { delwin(_win); }
 
 
 /*
@@ -165,26 +113,12 @@ void clg_cursescpp::Window::printWin(const char* text, ...)
 */
 
 
-clg_cursescpp::Window::Window(PairNum<int> xy, PairNum<int> lw, const TextXY title) 
+clg_cursescpp::Window::Window(PairNum<int> xy, PairNum<int> lw)
+        // const TextXY title 
     : _xy(convertStructPairNum<__int16>(xy))
     , _win(createWindow(xy, lw))
 {
     ::box(_win, 0, 0);
-
-    if (!strlen(title._text)) {
-        __int16 x = convertTypeData<__int16>((_xy._x / 2) - 
-            (std::wcslen(converterCharInWchar(title._text)) / 2));
-        
-        if (title.isTopOrDownWindow)
-        {
-            movePrintWin({x, 0}, title._text);
-        }
-        
-        else
-        {
-            movePrintWin({x, _xy._y}, title._text);
-        }
-    }
 
 }
 

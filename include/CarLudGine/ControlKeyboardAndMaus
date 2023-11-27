@@ -1,0 +1,32 @@
+
+#pragma once
+
+#include "Config"
+
+#include <functional>
+
+namespace clg_cursescpp {
+
+  class ControlKeyboard
+  {
+    public:
+      void scanWin(const char* text, ...);
+      void moveScanWin(const PairNum<int> xy, const char* text, ...);
+
+      void eventKeyboard(std::function<void()> func, 
+        const char button);
+      
+      const char getCh();
+
+      void echo(const bool no_off);
+      void curs(const int a);
+
+    protected:
+      virtual pWIN getWin();
+
+      inline void scan(const char *str, va_list args, 
+        WINDOW *window, const PairNum<int> xy = NULL_XY);
+
+  };
+
+}

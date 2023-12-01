@@ -1,7 +1,6 @@
 
 #include "ControlKeyboardAndMaus"
-#include <curses.h>
-
+#include "Config"
 
 /*
 
@@ -58,6 +57,22 @@ void clg_cursescpp::ControlKeyboard::curs(const int a)
     ::curs_set(a);
 }
 
+clg_cursescpp::ControlKeyboard::ControlKeyboard(clg_cursescpp::IWindow& window, 
+    const bool echo_no_off, const bool curs_a)
+{
+    win = window.getWindow();
+    echo(true);
+    curs(0);
+}
+
+clg_cursescpp::ControlKeyboard::ControlKeyboard(clg_cursescpp::pWIN window, 
+    const bool echo_no_off, const bool curs_a)
+{
+    win = window;
+    echo(true);
+    curs(0);
+}
+
 /*
 
     Protected
@@ -71,4 +86,4 @@ inline void clg_cursescpp::ControlKeyboard::scan(const char *str, va_list args, 
     vw_scanw(window, str, args);
 }
 
-clg_cursescpp::pWIN clg_cursescpp::ControlKeyboard::getWin() { return stdscr; }
+const clg_cursescpp::pWIN clg_cursescpp::ControlKeyboard::getWin() { return win; }

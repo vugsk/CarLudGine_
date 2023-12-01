@@ -9,36 +9,23 @@ class MainWin : public Window, public ControlKeyboard
     public:
         MainWin(PairNum<int> xy, PairNum<int> lw)
             : Window(xy, lw)
-        {
-            curs(0);
-            echo(true);
-        }
-    
-    protected:
-        pWIN getWin() override {
-            return getWindow();
-        }
-
-
+            , ControlKeyboard(getWindow(), true, 0) {}
 
 };
-
-void test(MainWin* win) {
-
-    win->printWin("jdfl");    
-
-}
 
 int main()
 {
 
     initScreen(true);
 
-    MainWin *win = new MainWin({50, 10}, {25, 5});
+    MainWin win({50, 10}, {25, 5});
+    // ControlKeyboard CK(win, true, 0);
 
-    win->eventKeyboard(std::bind(test, win), 10);
+    win.eventKeyboard([&win]() {
+        win.printWin("kdfl");
+    }, 10);
 
-    win->close();
+    win.close();
 
     return 0;
 }

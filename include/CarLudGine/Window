@@ -1,36 +1,36 @@
 
 #pragma once
 
-#include "Config"
+#include "IWindow"
 
 namespace clg_cursescpp {
   
   void initScreen(const bool keypad);
 
-  class Window
+  class Window : public IWindow
   {
     public:
       Window(const Window &);
-      Window(Window &&) noexcept = delete;
+      Window(Window &&) noexcept;
       Window &operator=(const Window &);
       Window &operator=(Window &&) noexcept;
       Window(PairNum<int> xy, PairNum<int> lw);
-      virtual ~Window();
+      ~Window() override;
 
       void close();
       __int16 getX();
-      inline __int16 getY();
+      __int16 getY();
 
       void movePrintWin(PairNum<int> xy, 
-        const char* text, ...);
+        const char* text, ...) ;
       void printWin(const char* text, ...);
 
     protected:
-      inline void print(const char *text, va_list args, 
+      void print(const char *text, va_list args, 
         const PairNum<int> xy = NULL_XY);
-      inline pWIN createWindow(const PairNum<int> xy, 
+      pWIN createWindow(const PairNum<int> xy, 
         const PairNum<int> lw);
-      pWIN getWindow();
+      pWIN getWindow() const override final;
     
     private:
       pWIN             _win;

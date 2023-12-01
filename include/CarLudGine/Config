@@ -23,6 +23,7 @@ namespace clg_cursescpp {
   };
 
   extern const PairNum<int> NULL_XY;
+  extern const PairNum<__int16> NULL_XY_int16;
   extern const TextXY NULL_TEXT_XY;
   extern PairNum<__int16> MAX_SCREEN_XY;
 

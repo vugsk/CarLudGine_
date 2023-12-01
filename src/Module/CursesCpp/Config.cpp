@@ -10,6 +10,10 @@ const clg_cursescpp::PairNum<int> clg_cursescpp::NULL_XY = {
     0, 0
 };
 
+const clg_cursescpp::PairNum<clg_cursescpp::__int16> clg_cursescpp::NULL_XY_int16 = {
+    0, 0
+};
+
 const clg_cursescpp::TextXY clg_cursescpp::NULL_TEXT_XY = {
     "", 0
 };

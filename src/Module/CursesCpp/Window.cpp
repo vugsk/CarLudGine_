@@ -1,5 +1,6 @@
 
 #include "Window"
+#include "Config"
 #include <curses.h>
 
 /*
@@ -39,7 +40,7 @@ void clg_cursescpp::initScreen(const bool keypad)
 
 */
 
-clg_cursescpp::pWIN clg_cursescpp::Window::getWindow() {
+clg_cursescpp::pWIN clg_cursescpp::Window::getWindow() const {
     return _win;
 }
 
@@ -130,7 +131,22 @@ clg_cursescpp::Window::~Window()
 
 clg_cursescpp::Window::Window(const Window &other) 
     : _xy(other._xy)
-    , _win(!other._win? new WINDOW(*other._win) : nullptr) {}
+    , _win(!other._win? new WINDOW(*other._win) : nullptr) {
+        movePrintWin({5, 5}, "copy");
+    }
+
+clg_cursescpp::Window::Window(Window&& other) noexcept 
+    : _xy(NULL_XY_int16)
+    , _win(nullptr)
+{
+    _xy = other._xy;
+    _win = other._win;
+
+    other._xy = NULL_XY_int16;
+    _win = nullptr;
+
+    movePrintWin({5, 6}, "move");
+}
 
 clg_cursescpp::Window& clg_cursescpp::Window::operator=(const Window &other)
 {
@@ -159,8 +175,7 @@ clg_cursescpp::Window& clg_cursescpp::Window::operator=(Window &&other) noexcept
 
         _xy = other._xy;
 
-        other._xy._x = 0;
-        other._xy._y = 0;
+        other._xy = NULL_XY_int16;
         other._win = nullptr;
     }
 

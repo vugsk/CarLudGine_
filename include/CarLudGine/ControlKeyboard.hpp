@@ -3,8 +3,8 @@
 
 #include <functional>
 
-#include "Config"
-#include "IWindow"
+#include "Config.hpp"
+#include "IWindow.hpp"
 
 namespace clg_cursescpp {
   

@@ -1,5 +1,5 @@
 
-#include "Config"
+#include "Config.hpp"
 
 #include <cstddef>
 #include <cstdlib>

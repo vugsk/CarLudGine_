@@ -1,7 +1,5 @@
 
-#include "Window"
-#include "Config"
-#include <curses.h>
+#include "Window.hpp"
 
 /*
 

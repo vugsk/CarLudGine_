@@ -1,6 +1,6 @@
 
-#include <ControlKeyboardAndMaus>
-#include <Window>
+#include <ControlKeyboard.hpp>
+#include <Window.hpp>
 
 using namespace clg_cursescpp;
 
@@ -15,11 +15,9 @@ class MainWin : public Window, public ControlKeyboard
 
 int main()
 {
-
     initScreen(true);
 
     MainWin win({50, 10}, {25, 5});
-    // ControlKeyboard CK(win, true, 0);
 
     win.eventKeyboard([&win]() {
         win.printWin("kdfl");

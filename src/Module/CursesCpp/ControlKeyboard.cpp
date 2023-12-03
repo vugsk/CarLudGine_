@@ -1,6 +1,5 @@
 
-#include "ControlKeyboardAndMaus"
-#include "Config"
+#include "ControlKeyboard.hpp"
 
 /*
 

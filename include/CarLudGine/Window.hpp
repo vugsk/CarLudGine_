@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "IWindow"
+#include "IWindow.hpp"
 
 namespace clg_cursescpp {
   

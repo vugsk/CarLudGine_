@@ -1,7 +1,7 @@
 
 #pragma once
 
-#include "Config"
+#include "Config.hpp"
 
 namespace clg_cursescpp {
 

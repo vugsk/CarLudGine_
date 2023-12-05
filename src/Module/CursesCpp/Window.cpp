@@ -1,5 +1,6 @@
 
 #include "Window.hpp"
+#include <utility>
 
 /*
 
@@ -49,7 +50,7 @@ clg_cursescpp::pWIN clg_cursescpp::Window::getWindow() const {
 
 */
 
-inline void clg_cursescpp::Window::print(const char *text, va_list args, 
+void clg_cursescpp::Window::print(const char *text, va_list args, 
     clg_cursescpp::PairNum<int> xy)
 {
     wmove(_win, xy._y, xy._x);
@@ -57,7 +58,7 @@ inline void clg_cursescpp::Window::print(const char *text, va_list args,
     wrefresh(_win);
 }
 
-inline clg_cursescpp::pWIN clg_cursescpp::Window::createWindow(
+clg_cursescpp::pWIN clg_cursescpp::Window::createWindow(
     const PairNum<int> xy,
     const PairNum<int> widthAndLength)
 {
@@ -134,17 +135,8 @@ clg_cursescpp::Window::Window(const Window &other)
     }
 
 clg_cursescpp::Window::Window(Window&& other) noexcept 
-    : _xy(NULL_XY_int16)
-    , _win(nullptr)
-{
-    _xy = other._xy;
-    _win = other._win;
-
-    other._xy = NULL_XY_int16;
-    _win = nullptr;
-
-    movePrintWin({5, 6}, "move");
-}
+    : _xy(std::move(other._xy))
+    , _win(std::move(other._win)) {}
 
 clg_cursescpp::Window& clg_cursescpp::Window::operator=(const Window &other)
 {
@@ -169,12 +161,8 @@ clg_cursescpp::Window& clg_cursescpp::Window::operator=(Window &&other) noexcept
 {
     if (this != &other)
     {
-        _win = nullptr;
-
-        _xy = other._xy;
-
-        other._xy = NULL_XY_int16;
-        other._win = nullptr;
+        _win = std::move(other._win);
+        _xy = std::move(other._xy);
     }
 
     return *this;

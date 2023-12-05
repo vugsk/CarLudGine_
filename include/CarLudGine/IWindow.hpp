@@ -1,15 +1,14 @@
 
 #pragma once
 
-#include "Config.hpp"
-
 namespace clg_cursescpp {
-
+  #include <curses.h>
+  
   class IWindow
   {
     public:
       virtual ~IWindow() {}
-      virtual pWIN getWindow() const = 0;
+      virtual WINDOW* getWindow() const = 0;
   };
 
 }

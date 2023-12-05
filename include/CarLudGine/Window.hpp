@@ -1,13 +1,14 @@
 
 #pragma once
 
+#include "Config.hpp"
 #include "IWindow.hpp"
 
 namespace clg_cursescpp {
-  
+
   void initScreen(const bool keypad);
 
-  class Window : public IWindow
+  class Window : public virtual IWindow
   {
     public:
       Window(const Window &);

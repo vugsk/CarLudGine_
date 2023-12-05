@@ -20,9 +20,7 @@ int main()
     MainWin win({50, 10}, {25, 5});
 
     win.eventKeyboard([&win]() {
-
         win.printWin("kdfl");
-    
     }, 10);
 
     win.close();

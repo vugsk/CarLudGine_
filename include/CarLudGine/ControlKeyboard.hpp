@@ -4,10 +4,12 @@
 #include <functional>
 
 #include "Config.hpp"
-#include "IWindow.hpp"
+
 
 namespace clg_cursescpp {
-  
+
+  class IWindow;
+
   static const char DOWN = 
     convertTypeData<char>(KEY_DOWN);   // стрелка вниз
   static const char UP    = 
@@ -46,13 +48,11 @@ namespace clg_cursescpp {
       void curs(const int a);
 
     protected:
-      const pWIN getWin();
-
       inline void scan(const char *str, va_list args, 
-        WINDOW *window, const PairNum<int> xy = NULL_XY);
+        pWIN window, const PairNum<int> xy = NULL_XY);
 
     private:
-      pWIN win;
+      pWIN _win;
     
   };
 

@@ -1,6 +1,8 @@
 
 #include "ControlKeyboard.hpp"
 
+#include "IWindow.hpp"
+
 /*
 
     class ControlKeyboard
@@ -17,7 +19,7 @@ void clg_cursescpp::ControlKeyboard::scanWin(const char *str, ...)
 {
     va_list args;
     va_start(args, str);
-    scan(str, args, getWin());
+    scan(str, args,  _win);
     va_end(args);
 }
 
@@ -26,11 +28,11 @@ void clg_cursescpp::ControlKeyboard::moveScanWin(const PairNum<int> xy,
 {
     va_list args;
     va_start(args, str);
-    scan(str, args, getWin(), xy);
+    scan(str, args, _win, xy);
     va_end(args);
 }
 
-const char clg_cursescpp::ControlKeyboard::getCh() { return ::wgetch(getWin()); }
+const char clg_cursescpp::ControlKeyboard::getCh() { return ::wgetch(_win); }
 
 void clg_cursescpp::ControlKeyboard::eventKeyboard(std::function<void()> func, 
     const char button)
@@ -59,7 +61,7 @@ void clg_cursescpp::ControlKeyboard::curs(const int a)
 clg_cursescpp::ControlKeyboard::ControlKeyboard(clg_cursescpp::IWindow& window, 
     const bool echo_no_off, const bool curs_a)
 {
-    win = window.getWindow();
+    _win = window.getWindow();
     echo(true);
     curs(0);
 }
@@ -67,7 +69,7 @@ clg_cursescpp::ControlKeyboard::ControlKeyboard(clg_cursescpp::IWindow& window,
 clg_cursescpp::ControlKeyboard::ControlKeyboard(clg_cursescpp::pWIN window, 
     const bool echo_no_off, const bool curs_a)
 {
-    win = window;
+    _win = window;
     echo(true);
     curs(0);
 }
@@ -84,5 +86,3 @@ inline void clg_cursescpp::ControlKeyboard::scan(const char *str, va_list args, 
     wmove(window, xy._y, xy._x);
     vw_scanw(window, str, args);
 }
-
-const clg_cursescpp::pWIN clg_cursescpp::ControlKeyboard::getWin() { return win; }

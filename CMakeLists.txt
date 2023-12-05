@@ -1,6 +1,7 @@
 cmake_minimum_required(VERSION 3.26)
 
 project(CarLudGine)
+set(CMAKE_CXX_STANDARD 26)
 
 ## Curses
 if(WIN32)
@@ -53,12 +54,6 @@ file(GLOB SRC_CURSESCPP
 
 
 add_executable(CarLudGine ${SRC_ROOT} ${SRC_CURSESCPP})
-
-set_target_properties(CarLudGine PROPERTIES
-    CXX_STANDARD 20
-    CXX_STANDARD_REQUIRED YES
-    CXX_EXTENSIONS NO
-)
 
 # target_include_directories(CarLudGine PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 target_link_libraries(CarLudGine ${PD_OR_N_CURSES} ${Boost_LIBRARIES} ${nlohmann_LIB})

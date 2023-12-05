@@ -1,7 +1,10 @@
 
+
+
 #include "ControlKeyboard.hpp"
 
 #include "IWindow.hpp"
+#include <utility>
 
 /*
 
@@ -23,7 +26,7 @@ void clg_cursescpp::ControlKeyboard::scanWin(const char *str, ...)
     va_end(args);
 }
 
-void clg_cursescpp::ControlKeyboard::moveScanWin(const PairNum<int> xy, 
+void clg_cursescpp::ControlKeyboard::moveScanWin(const std::pair<int, int>& xy, 
     const char *str, ...)
 {
     va_list args;
@@ -66,7 +69,7 @@ clg_cursescpp::ControlKeyboard::ControlKeyboard(clg_cursescpp::IWindow& window,
     curs(0);
 }
 
-clg_cursescpp::ControlKeyboard::ControlKeyboard(clg_cursescpp::pWIN window, 
+clg_cursescpp::ControlKeyboard::ControlKeyboard(WINDOW* window, 
     const bool echo_no_off, const bool curs_a)
 {
     _win = window;
@@ -80,9 +83,9 @@ clg_cursescpp::ControlKeyboard::ControlKeyboard(clg_cursescpp::pWIN window,
 
 */
 
-inline void clg_cursescpp::ControlKeyboard::scan(const char *str, va_list args, WINDOW *window, 
-    const PairNum<int> xy)
+inline void clg_cursescpp::ControlKeyboard::scan(const char *str, va_list args, 
+    WINDOW *window, const std::pair<int, int>& xy)
 {
-    wmove(window, xy._y, xy._x);
+    wmove(window, xy.second, xy.first);
     vw_scanw(window, str, args);
 }

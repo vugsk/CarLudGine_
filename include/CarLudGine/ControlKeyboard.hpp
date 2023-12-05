@@ -1,43 +1,41 @@
 
 #pragma once
 
-#include <functional>
-
 #include "Config.hpp"
 
-
 namespace clg_cursescpp {
-
+  
   class IWindow;
 
-  static const char DOWN = 
-    convertTypeData<char>(KEY_DOWN);   // стрелка вниз
-  static const char UP    = 
-    convertTypeData<char>(KEY_UP);       // стрелка вверх
-  static const char LEFT  = 
-    convertTypeData<char>(KEY_LEFT);   // стрелка влево
-  static const char RIGHT = 
-    convertTypeData<char>(KEY_RIGHT); // стрелка вправо
-  static const char KEY_W = 119;
-  static const char KEY_A = 97;
-  static const char KEY_S = 115;
-  static const char KEY_D = 100;
-  static const char KEY_I = 105;
-  static const char KEY_R = 114;
-  static const char KEY_E = 101;
-  static const char ESC   = 27;
-  static const char ENTER = 10;
+  extern const char DOWN; // стрелка вниз
+  // convertTypeData<char>(KEY_DOWN);   
+  extern const char UP; // стрелка вверх
+    // convertTypeData<char>(KEY_UP);       
+  extern const char LEFT; // стрелка влево
+    // convertTypeData<char>(KEY_LEFT);   
+  extern const char RIGHT; // стрелка вправо
+    // convertTypeData<char>(KEY_RIGHT); 
+  // extern const char KEY_W = 119;
+  // extern const char KEY_A = 97;
+  // extern const char KEY_S = 115;
+  // extern const char KEY_D = 100;
+  // extern const char KEY_I = 105;
+  // extern const char KEY_R = 114;
+  // extern const char KEY_E = 101;
+  // extern const char ESC   = 27;
+  // extern const char ENTER = 10;
   
   class ControlKeyboard
   {
     public:
       ControlKeyboard(IWindow& win, 
         const bool echo_no_off, const bool curs_a);
-      ControlKeyboard(pWIN win, 
+      ControlKeyboard(WINDOW* win, 
         const bool echo_no_off, const bool curs_a);
 
       void scanWin(const char* text, ...);
-      void moveScanWin(const PairNum<int> xy, const char* text, ...);
+      void moveScanWin(const std::pair<int, int>& xy, 
+        const char* text, ...);
 
       void eventKeyboard(std::function<void()> func, 
         const char button);
@@ -49,10 +47,10 @@ namespace clg_cursescpp {
 
     protected:
       inline void scan(const char *str, va_list args, 
-        pWIN window, const PairNum<int> xy = NULL_XY);
+        WINDOW* window, const std::pair<int, int>& xy = NULL_XY);
 
     private:
-      pWIN _win;
+      WINDOW* _win;
     
   };
 

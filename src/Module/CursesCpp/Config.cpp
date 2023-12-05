@@ -4,23 +4,19 @@
 #include <cstddef>
 #include <cstdlib>
 #include <cstring>
+#include <utility>
 
 
-const clg_cursescpp::PairNum<int> clg_cursescpp::NULL_XY = {
-    0, 0
-};
+const std::pair clg_cursescpp::NULL_XY = std::make_pair(0, 0);
 
-const clg_cursescpp::PairNum<clg_cursescpp::__int16> clg_cursescpp::NULL_XY_int16 = {
-    0, 0
-};
+const std::pair<short, short> clg_cursescpp::NULL_XY_int16 = 
+    std::make_pair<short, short>(0, 0);
 
 const clg_cursescpp::TextXY clg_cursescpp::NULL_TEXT_XY = {
     "", 0
 };
 
-clg_cursescpp::PairNum<clg_cursescpp::__int16> clg_cursescpp::MAX_SCREEN_XY = {
-    0, 0
-};
+std::pair clg_cursescpp::MAX_SCREEN_XY = std::make_pair(0, 0);
 
 const wchar_t* clg_cursescpp::converterCharInWchar(const char* ch)
 {

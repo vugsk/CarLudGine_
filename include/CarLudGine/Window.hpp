@@ -4,8 +4,8 @@
 #include "Config.hpp"
 #include "IWindow.hpp"
 
-namespace clg_cursescpp {
 
+namespace clg_cursescpp {
   void initScreen(const bool keypad);
 
   class Window : public virtual IWindow
@@ -13,29 +13,30 @@ namespace clg_cursescpp {
     public:
       Window(const Window &);
       Window(Window &&) noexcept;
-      Window &operator=(const Window &);
-      Window &operator=(Window &&) noexcept;
-      Window(PairNum<int> xy, PairNum<int> lw);
+      Window &operator=(const Window &) = delete;
+      Window &operator=(Window &&) = delete;
+      
+      Window(const std::pair<int, int>& xy, const std::pair<int, int>& lw);
       ~Window() override;
 
       void close();
-      __int16 getX();
-      __int16 getY();
+      short getX();
+      short getY();
 
-      void movePrintWin(PairNum<int> xy, 
+      void movePrintWin(std::pair<int, int>& xy, 
         const char* text, ...) ;
       void printWin(const char* text, ...);
 
     protected:
       void print(const char *text, va_list args, 
-        const PairNum<int> xy = NULL_XY);
-      pWIN createWindow(const PairNum<int> xy, 
-        const PairNum<int> lw);
-      pWIN getWindow() const override final;
+        const std::pair<int, int>& xy = NULL_XY);
+      WINDOW* createWindow(const std::pair<int, int>& xy, 
+        const std::pair<int, int>& lw);
+      WINDOW* getWindow() const override final;
     
     private:
-      pWIN             _win;
-      PairNum<__int16> _xy;
+      WINDOW*                        _win;
+      const std::pair<short, short>& _xy;
 
   };
 

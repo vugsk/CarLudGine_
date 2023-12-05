@@ -1,9 +1,10 @@
 
 #pragma once
 
-namespace clg_cursescpp {
-  #include <curses.h>
-  
+
+namespace clg_cursescpp
+{
+
   class IWindow
   {
     public:

@@ -3,8 +3,25 @@
 
 #include "ControlKeyboard.hpp"
 
+#include "Config.hpp"
 #include "IWindow.hpp"
-#include <utility>
+
+
+const char clg_cursescpp::DOWN  = convertTypeData<char>(KEY_DOWN);; // стрелка вниз   
+const char clg_cursescpp::UP    = convertTypeData<char>(KEY_UP);; // стрелка вверх       
+const char clg_cursescpp::LEFT  = convertTypeData<char>(KEY_LEFT);; // стрелка влево   
+const char clg_cursescpp::RIGHT = convertTypeData<char>(KEY_RIGHT); // стрелка вправо 
+
+const char clg_cursescpp::KEY_W = 119;
+const char clg_cursescpp::KEY_A = 97;
+const char clg_cursescpp::KEY_S = 115;
+const char clg_cursescpp::KEY_D = 100;
+const char clg_cursescpp::KEY_I = 105;
+const char clg_cursescpp::KEY_R = 114;
+const char clg_cursescpp::KEY_E = 101;
+const char clg_cursescpp::ESC   = 27;
+const char clg_cursescpp::ENTER = 10;
+
 
 /*
 
@@ -64,6 +81,10 @@ void clg_cursescpp::ControlKeyboard::curs(const int a)
 clg_cursescpp::ControlKeyboard::ControlKeyboard(clg_cursescpp::IWindow& window, 
     const bool echo_no_off, const bool curs_a)
 {
+    #if DEBUG
+        PRINT_CONSTRUCTED_DEBUG(CONTROL_KEYBOARD_CL);
+    #endif
+
     _win = window.getWindow();
     echo(true);
     curs(0);
@@ -71,10 +92,21 @@ clg_cursescpp::ControlKeyboard::ControlKeyboard(clg_cursescpp::IWindow& window,
 
 clg_cursescpp::ControlKeyboard::ControlKeyboard(WINDOW* window, 
     const bool echo_no_off, const bool curs_a)
+        : _win(checkingForWindow(window))
 {
-    _win = window;
+    #if DEBUG
+        PRINT_CONSTRUCTED_DEBUG(CONTROL_KEYBOARD_CL);
+    #endif
+
     echo(true);
     curs(0);
+}
+
+clg_cursescpp::ControlKeyboard::~ControlKeyboard()
+{
+    #if DEBUG
+        PRINT_DESTRUCTED_DEBUG(CONTROL_KEYBOARD_CL);
+    #endif
 }
 
 /*

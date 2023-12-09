@@ -10,6 +10,8 @@ namespace clg_cursescpp
     public:
       virtual ~IWindow() {}
       virtual WINDOW* getWindow() const = 0;
+      virtual const std::pair<short, short>& 
+        getXY() const = 0;
   };
 
 }

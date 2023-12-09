@@ -7,23 +7,20 @@ namespace clg_cursescpp {
   
   class IWindow;
 
-  extern const char DOWN; // стрелка вниз
-  // convertTypeData<char>(KEY_DOWN);   
-  extern const char UP; // стрелка вверх
-    // convertTypeData<char>(KEY_UP);       
-  extern const char LEFT; // стрелка влево
-    // convertTypeData<char>(KEY_LEFT);   
+  extern const char DOWN;  // стрелка вниз
+  extern const char UP;    // стрелка вверх    
+  extern const char LEFT;  // стрелка влево  
   extern const char RIGHT; // стрелка вправо
-    // convertTypeData<char>(KEY_RIGHT); 
-  // extern const char KEY_W = 119;
-  // extern const char KEY_A = 97;
-  // extern const char KEY_S = 115;
-  // extern const char KEY_D = 100;
-  // extern const char KEY_I = 105;
-  // extern const char KEY_R = 114;
-  // extern const char KEY_E = 101;
-  // extern const char ESC   = 27;
-  // extern const char ENTER = 10;
+
+  extern const char KEY_W;
+  extern const char KEY_A;
+  extern const char KEY_S;
+  extern const char KEY_D;
+  extern const char KEY_I;
+  extern const char KEY_R;
+  extern const char KEY_E;
+  extern const char ESC;
+  extern const char ENTER;
   
   class ControlKeyboard
   {
@@ -32,6 +29,7 @@ namespace clg_cursescpp {
         const bool echo_no_off, const bool curs_a);
       ControlKeyboard(WINDOW* win, 
         const bool echo_no_off, const bool curs_a);
+      ~ControlKeyboard();
 
       void scanWin(const char* text, ...);
       void moveScanWin(const std::pair<int, int>& xy, 

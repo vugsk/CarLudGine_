@@ -3,6 +3,7 @@
 
 #include "Config.hpp"
 #include "IWindow.hpp"
+#include <utility>
 
 
 namespace clg_cursescpp {
@@ -16,14 +17,17 @@ namespace clg_cursescpp {
       Window &operator=(const Window &) = delete;
       Window &operator=(Window &&) = delete;
       
-      Window(const std::pair<int, int>& xy, const std::pair<int, int>& lw);
+      Window(const std::pair<int, int>& xy, 
+        const std::pair<int, int>& lw);
       ~Window() override;
 
       void close();
-      short getX();
-      short getY();
+      const short getX();
+      const short getY();
+      const std::pair<short, short>& 
+        getXY() const override final;
 
-      void movePrintWin(std::pair<int, int>& xy, 
+      void movePrintWin(const std::pair<int, int>& xy, 
         const char* text, ...) ;
       void printWin(const char* text, ...);
 
@@ -33,11 +37,11 @@ namespace clg_cursescpp {
       WINDOW* createWindow(const std::pair<int, int>& xy, 
         const std::pair<int, int>& lw);
       WINDOW* getWindow() const override final;
+      
     
     private:
-      WINDOW*                        _win;
+      WINDOW*                       _win;
       const std::pair<short, short>& _xy;
-
   };
 
 }

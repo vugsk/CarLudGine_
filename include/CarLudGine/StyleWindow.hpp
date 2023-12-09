@@ -8,9 +8,17 @@ namespace clg_cursescpp
 {
   class IWindow;
 
-  typedef unsigned char __int8_u;
 
+  // extern const char* WALL_Y_PERPENDICULAR;
+  // extern const char* WALL_Y_ANGLE_UNDER_90_DOWN;
+  // extern const char* WALL_Y_ANGLE_UNDER_90_TOP;
+  // extern const char* WALL_X_IN_PARALLEL;
+  // extern const char* WALL_X_ANGLE_UNDER_90_LEFT;
+  // extern const char* WALL_X_ANGLE_UNDER_90_RIGHT;
 
+  extern const std::vector<std::pair<const char*, 
+    const char*>> WALL_TYPES;
+  
   struct ColorRgb
   {
     short red;
@@ -18,7 +26,7 @@ namespace clg_cursescpp
     short blue;
   };
 
-  enum class Color: __int8_u
+  enum class Color: unsigned char
   {
     WHITE,
     BLACK,
@@ -35,15 +43,18 @@ namespace clg_cursescpp
   {
     public:
       StyleWindow(const IWindow& window);
-      StyleWindow(WINDOW* window);
+      StyleWindow(WINDOW* window, 
+        const std::pair<short, short>& xy);
       ~StyleWindow();
 
-      void drawWall(const std::pair<int, int> xy);
+      void drawWall(
+        std::vector<const char*>& vec, 
+        const bool isHorizontalOrVertical);
       void decorateColor(const Color& color, const char ch);
       void headerWindow(const char* text);
       void clear();
-      void clear(const std::pair<short, short> begin_xy, 
-        const std::pair<short, short> end_xy);
+      void clear(const std::pair<short, short>& begin_xy, 
+        const std::pair<short, short>& end_xy);
 
     protected:
       const bool getIsHasColor();
@@ -57,8 +68,9 @@ namespace clg_cursescpp
       void setAttr(const unsigned attribute);
 
     private:
-      bool isHasColor;
-      WINDOW* win;
+      bool                           _isHasColor;
+      WINDOW*                        _win;
+      const std::pair<short, short>& _xy;
 
   };
 

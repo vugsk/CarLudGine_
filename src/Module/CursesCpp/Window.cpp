@@ -1,9 +1,12 @@
 
 #include "Window.hpp"
 
+#include <clocale>
+
 
 void clg_cursescpp::initScreen(const bool keypad)
 {
+    ::setlocale(LC_CTYPE, "");
     ::initscr();
     ::keypad(stdscr, keypad);
 

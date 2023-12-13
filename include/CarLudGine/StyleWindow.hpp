@@ -2,19 +2,13 @@
 #pragma once
 
 #include "Config.hpp"
-
+#include <cstddef>
+#include <utility>
+#include <vector>
 
 namespace clg_cursescpp
 {
   class IWindow;
-
-
-  // extern const char* WALL_Y_PERPENDICULAR;
-  // extern const char* WALL_Y_ANGLE_UNDER_90_DOWN;
-  // extern const char* WALL_Y_ANGLE_UNDER_90_TOP;
-  // extern const char* WALL_X_IN_PARALLEL;
-  // extern const char* WALL_X_ANGLE_UNDER_90_LEFT;
-  // extern const char* WALL_X_ANGLE_UNDER_90_RIGHT;
 
   extern const std::vector<std::pair<const char*, 
     const char*>> WALL_TYPES;
@@ -47,9 +41,11 @@ namespace clg_cursescpp
         const std::pair<short, short>& xy);
       ~StyleWindow();
 
-      void drawWall(
-        std::vector<const char*>& vec, 
-        const bool isHorizontalOrVertical);
+      const std::pair<const std::vector<const char*>&, 
+          const bool>& 
+        drawWall(const bool& isHorizontalOrVertical, 
+          const size_t size);
+      
       void decorateColor(const Color& color, const char ch);
       void headerWindow(const char* text);
       void clear();

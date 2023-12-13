@@ -3,18 +3,12 @@
 
 #include "IWindow.hpp"
 #include <algorithm>
+#include <cstddef>
 #include <curses.h>
 #include <functional>
 #include <utility>
 #include <vector>
 
-
-// const char* clg_cursescpp::WALL_Y_PERPENDICULAR        = "│";
-// const char* clg_cursescpp::WALL_Y_ANGLE_UNDER_90_DOWN  = "┬"; 
-// const char* clg_cursescpp::WALL_Y_ANGLE_UNDER_90_TOP   = "┴";
-// const char* clg_cursescpp::WALL_X_IN_PARALLEL          = "─";
-// const char* clg_cursescpp::WALL_X_ANGLE_UNDER_90_LEFT  = "├";
-// const char* clg_cursescpp::WALL_X_ANGLE_UNDER_90_RIGHT = "┤";
 
 const std::vector<std::pair<const char*, 
     const char*>> clg_cursescpp::WALL_TYPES = {
@@ -29,41 +23,80 @@ const bool clg_cursescpp::StyleWindow::getIsHasColor()
     return _isHasColor;
 }
 
-//! fix
-void test(std::vector<const char*>& vec, const bool isHorizontalOrVertical,
-    const std::pair<const char*, const char*>& pair)
+const std::pair<const std::vector<const char*>&, const bool>&
+clg_cursescpp::StyleWindow::drawWall(const bool& isHorizontalOrVertical, const size_t size)
 {
+    std::vector<const char*> vec(size);
 
-    if (isHorizontalOrVertical)
+    auto est = [&vec, isHorizontalOrVertical, size](
+        const std::pair<const char*, const char*>& pair) 
     {
-        vec.push_back(pair.first);
-    }
-    else
-    {
-        vec.push_back(pair.second);
-    }
+        if (WALL_TYPES[0] == pair)
+        {
+            for(size_t i = 1; i < size-1; i++)
+            {
+                if (isHorizontalOrVertical)
+                    vec[i] = pair.first;
+                else
+                    vec[i] = pair.second;
+            }
+        }
 
+        // if (isHorizontalOrVertical)
+        // {
+        //   if (WALL_TYPES[1] == pair)
+        //     vec[0] = pair.first;
+        //   else
+        //     vec[0] = pair.second;
+        // }
+        // else
+        // {
+        //   if (WALL_TYPES[2] == pair)
+        //     vec[S-1] = pair.first;
+        //   else
+        //     vec[S-1] = pair.second;
+        // }
+    };
+
+    std::for_each_n(WALL_TYPES.begin(), size, est); 
+
+    return std::make_pair(vec, isHorizontalOrVertical);
 }
 
-void clg_cursescpp::StyleWindow::drawWall(
-    std::vector<const char*>& vec, const bool isHorizontalOrVertical)
-{
+// void clg_cursescpp::StyleWindow::drawWall(
+//     std::vector<const char*>& vec, const bool isHorizontalOrVertical)
+// {
+//     auto est = [&vec, &isHorizontalOrVertical](
+//         const std::pair<const char*, const char*>& pair) 
+//     {
+//         if (WALL_TYPES[0] == pair)
+//         {
+//             for(size_t i = 1; i < S-1; i++)
+//             {
+//                 if (isHorizontalOrVertical)
+//                     vec[i] = pair.first;
+//                 else
+//                     vec[i] = pair.second;
+//             }
+//         }
 
-    // auto est = [&vec, &isHorizontalOrVertical](
-    //     const std::pair<const char*, const char*>& pair) 
-    // {
-    //     if (isHorizontalOrVertical)
-    //     {
-    //         vec.push_back(pair.first);
-    //     }
-    //     else
-    //     {
-    //         vec.push_back(pair.second);
-    //     }
-    // };
+//         if (isHorizontalOrVertical)
+//         {
+//             if (WALL_TYPES[1] == pair)
+//                 vec[0] = pair.first;
+//             else
+//                 vec[0] = pair.second;
+//         }
+//         else
+//         {
+//             if (WALL_TYPES[2] == pair)
+//                 vec[S-1] = pair.first;
+//             else
+//                 vec[S-1] = pair.second;
+//         }
+//     };
 
-    std::for_each(WALL_TYPES.begin(), WALL_TYPES.end(), 
-        std::bind(test, vec, isHorizontalOrVertical, std::placeholders::_1));
+//     std::for_each(WALL_TYPES.begin(), WALL_TYPES.end(), est);
     
     
     // const char* WALL;
@@ -121,7 +154,7 @@ void clg_cursescpp::StyleWindow::drawWall(
     //     print(x - wall_x, wall_y, WALL_90);
     //     print(x - 1, wall_y, WALL_180);
     // }
-}
+// }
 
 
 clg_cursescpp::StyleWindow::StyleWindow(const clg_cursescpp::IWindow& window)

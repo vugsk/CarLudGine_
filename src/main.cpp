@@ -1,9 +1,8 @@
 
+#include "Config.hpp"
 #include "StyleWindow.hpp"
 #include <Window.hpp>
 #include <ControlKeyboard.hpp>
-#include <cstddef>
-#include <utility>
 
 
 
@@ -16,25 +15,14 @@ class MainWin : public Window, public ControlKeyboard, public StyleWindow
                 const std::pair<int, int>& lw)
             : Window(xy, lw)
             , ControlKeyboard(getWindow(), true, 0)
-            , StyleWindow(getWindow(), getXY())
+            , StyleWindow(getWindow(), getXY()) {}
 
-        {
-            #if DEBUG
-                PRINT_CONSTRUCTED_DEBUG("MainWin");
-            #endif
-        }
-
-        ~MainWin() {
-            #if DEBUG
-                PRINT_DESTRUCTED_DEBUG("MainWin");
-            #endif
-        }
+        ~MainWin() {}
 
 };
 
 int main()
 {
-
     initScreen(true);
 
     MainWin win({50, 10}, {25, 5});
@@ -44,14 +32,19 @@ int main()
     {
         win.movePrintWin({0, 0}, "kdfl");
     };
-    
 
     win.eventKeyboard(fPrintInWindowText, 10);
 
-    std::vector<const char*> vec;
+    std::pair te = win.drawWall(true, 10);
 
-    win.drawWall(vec, true);
+    for (size_t i = 0; i < te.first.size(); i++)
+    {
+        win.movePrintWin({convertTypeData<short>(i), 0}, te.first[i]);
+    }
 
+    win.movePrintWin({0, 1}, "%d", convertTypeData<int>(te.first.size()));
+
+    win.getCh();
 
     win.close();
 

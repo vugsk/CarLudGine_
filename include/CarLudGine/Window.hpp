@@ -3,13 +3,13 @@
 
 #include "Config.hpp"
 #include "IWindow.hpp"
-#include <utility>
 
 
 namespace clg_cursescpp {
   void initScreen(const bool keypad);
 
   class Window : public virtual IWindow
+               , public virtual IWindowPrint
   {
     public:
       Window(const Window &);
@@ -28,7 +28,7 @@ namespace clg_cursescpp {
         getXY() const override final;
 
       void movePrintWin(const std::pair<int, int>& xy, 
-        const char* text, ...) ;
+        const char* text, ...) override final;
       void printWin(const char* text, ...);
 
     protected:
@@ -40,8 +40,8 @@ namespace clg_cursescpp {
       
     
     private:
-      WINDOW*                       _win;
-      const std::pair<short, short>& _xy;
+      WINDOW*                 _win;
+      std::pair<short, short> _xy;
   };
 
 }

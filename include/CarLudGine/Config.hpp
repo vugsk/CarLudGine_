@@ -47,15 +47,13 @@ namespace clg_cursescpp
   T1 convertTypeData(T2 data) { return static_cast<T1>(data); }
   
   template<typename T1, typename T2>
-  const std::pair<T1, T1>& convertStructPairNum(
+  const std::pair<T1, T1> convertStructPairNum(
     const std::pair<T2, T2>& data)
   {
-    const std::pair io = std::make_pair(
+    return std::make_pair(
       convertTypeData<T1>(data.first), 
       convertTypeData<T1>(data.second)
     );
-
-    return io;
   }
 
   WINDOW* checkingForWindow(WINDOW* window);

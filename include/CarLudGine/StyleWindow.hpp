@@ -3,12 +3,11 @@
 
 #include "Config.hpp"
 #include <cstddef>
-#include <utility>
-#include <vector>
 
 namespace clg_cursescpp
 {
   class IWindow;
+  class IWindowPrint;
 
   extern const std::vector<std::pair<const char*, 
     const char*>> WALL_TYPES;
@@ -41,10 +40,11 @@ namespace clg_cursescpp
         const std::pair<short, short>& xy);
       ~StyleWindow();
 
-      const std::pair<const std::vector<const char*>&, 
-          const bool>& 
-        drawWall(const bool& isHorizontalOrVertical, 
-          const size_t size);
+      
+      void drawWall(const size_t lenght, 
+        const bool isHorizontalOrVertical,
+        const std::pair<short, short>& whereWillStartingWall,
+        IWindowPrint& print); //* OK
       
       void decorateColor(const Color& color, const char ch);
       void headerWindow(const char* text);
@@ -54,6 +54,11 @@ namespace clg_cursescpp
 
     protected:
       const bool getIsHasColor();
+
+      void generateWall(
+        const bool isHorizontalOrVertical, 
+          std::vector<const char*>& vecSimbols,
+          const size_t size = 0); //* OK
       
       void startColor();
       void initPairColor(short pair_number, 

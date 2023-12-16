@@ -14,4 +14,12 @@ namespace clg_cursescpp
         getXY() const = 0;
   };
 
+  class IWindowPrint
+  {
+    public:
+      virtual ~IWindowPrint() {}
+      virtual void movePrintWin(const std::pair<int, int>& xy, 
+        const char* text, ...) = 0;
+  };
+
 }

@@ -87,10 +87,9 @@ void clg_cursescpp::Window::printWin(const char* text, ...)
 
 */
 
-
 clg_cursescpp::Window::Window(const std::pair<int, int>& xy, 
         const std::pair<int, int>& lw)
-    : _xy(convertStructPairNum<short, short>(xy))
+    : _xy(convertStructPairNum<short>(xy))
     , _win(createWindow(xy, lw))
 {
 

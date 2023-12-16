@@ -3,6 +3,9 @@
 #include "StyleWindow.hpp"
 #include <Window.hpp>
 #include <ControlKeyboard.hpp>
+#include <functional>
+#include <utility>
+#include <vector>
 
 
 
@@ -28,21 +31,17 @@ int main()
     MainWin win({50, 10}, {25, 5});
     
 
-    const auto fPrintInWindowText = [&win]()
-    {
-        win.movePrintWin({0, 0}, "kdfl");
-    };
+    // const auto fPrintInWindowText = [&win]()
+    // {
+    //     win.movePrintWin({0, 0}, "kdfl");
+    // };
 
-    win.eventKeyboard(fPrintInWindowText, 10);
+    // win.eventKeyboard(fPrintInWindowText, 10);
 
-    std::pair te = win.drawWall(true, 10);
 
-    for (size_t i = 0; i < te.first.size(); i++)
-    {
-        win.movePrintWin({convertTypeData<short>(i), 0}, te.first[i]);
-    }
-
-    win.movePrintWin({0, 1}, "%d", convertTypeData<int>(te.first.size()));
+    win.drawWall(10, false, 
+        std::make_pair<short, short>(5, 1), win);
+    
 
     win.getCh();
 

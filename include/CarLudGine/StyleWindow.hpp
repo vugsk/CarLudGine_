@@ -25,7 +25,7 @@ namespace clg_cursescpp
     BLUE,
     PURPLE,
     YELLOW,
-    RED
+    RED,
   };
 
   // TODO: attribute
@@ -36,16 +36,15 @@ namespace clg_cursescpp
       StyleWindow(IWindow* window);
       ~StyleWindow();
 
-      
       void drawWall(const size_t lenght, 
         const bool isHorizontalOrVertical,
         const std::pair<short, short>& whereWillStartingWall); //* OK
       
       void decorateColor(const Color& color, const char ch);
-      void headerWindow(const char* text);
-      void clear();
+      void headerWindow(const char* text); //* OK
+      void clear(); //* OK
       void clear(const std::pair<short, short>& begin_xy, 
-        const std::pair<short, short>& end_xy);
+        const std::pair<short, short>& end_xy); //* OK
 
     protected:
       const bool getIsHasColor();

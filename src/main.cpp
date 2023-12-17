@@ -19,9 +19,6 @@ class MainWin : public Window, public ControlKeyboard, public StyleWindow
 
 };
 
-void te(int ui)
-{}
-
 int main()
 {
     initScreen(true);
@@ -29,17 +26,20 @@ int main()
     MainWin win({50, 10}, {25, 5});
     
 
-    // const auto fPrintInWindowText = [&win]()
-    // {
-    //     win.movePrintWin({0, 0}, "kdfl");
-    // };
+    const auto fPrintInWindowText = [&win]()
+    {
+        win.movePrintWin({0, 0}, "kdfl");
+    };
 
-    // win.eventKeyboard(fPrintInWindowText, 10);
+    win.eventKeyboard(fPrintInWindowText, 10);
+
 
 
     win.drawWall(10, true, {10, 1});
     
     win.headerWindow("loihoi");
+
+
 
     win.getCh();
 

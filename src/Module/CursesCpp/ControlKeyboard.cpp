@@ -3,7 +3,6 @@
 
 #include "ControlKeyboard.hpp"
 
-#include "Config.hpp"
 #include "IWindow.hpp"
 
 

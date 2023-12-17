@@ -2,8 +2,6 @@
 #include "Window.hpp"
 
 #include <clocale>
-#include <utility>
-
 
 void clg_cursescpp::initScreen(const bool keypad)
 {
@@ -57,6 +55,7 @@ WINDOW* clg_cursescpp::Window::createWindow(
 const short clg_cursescpp::Window::getX() { return _xy.first; }
 const short clg_cursescpp::Window::getY() { return _xy.second; }
 void clg_cursescpp::Window::close() { delwin(_win); }
+void clg_cursescpp::Window::refresh() { ::wrefresh(_win); }
 
 const std::pair<short, short>& clg_cursescpp::Window::getXY() const
 {

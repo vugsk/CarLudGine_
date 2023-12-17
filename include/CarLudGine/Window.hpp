@@ -21,6 +21,7 @@ namespace clg_cursescpp {
       ~Window() override;
 
       void close();
+      void refresh();
       const short getX();
       const short getY();
       const std::pair<short, short>& 
@@ -31,7 +32,6 @@ namespace clg_cursescpp {
       void printWin(const char* text, ...) override final;
 
     protected:
-
       void print(const char *text, va_list args, 
         const std::pair<int, int>& xy = NULL_XY);
       WINDOW* createWindow(const std::pair<int, int>& xy, 

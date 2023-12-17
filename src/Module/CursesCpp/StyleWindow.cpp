@@ -1,14 +1,7 @@
 
 #include "StyleWindow.hpp"
 
-#include "Config.hpp"
 #include "IWindow.hpp"
-#include <any>
-#include <cstddef>
-#include <cstring>
-#include <cwchar>
-#include <iostream>
-#include <utility>
 
 
 const std::vector<std::pair<const char*, 
@@ -86,8 +79,25 @@ void clg_cursescpp::StyleWindow::headerWindow(const char* text)
 {
     int x = (_mWin->getXY().first/2)-(wcslen(converterCharInWchar(text)));
 
+    //! [ ] -> global
     _mWin->movePrintWin({x, 0}, "[ %s ]", text);
 }
+
+
+void clg_cursescpp::StyleWindow::clear() { ::wclear(_mWin->getWindow()); }
+
+void clg_cursescpp::StyleWindow::clear(const std::pair<short, short>& begin_xy, 
+    const std::pair<short, short>& end_xy)
+{
+    for (short i = begin_xy.first; i < end_xy.first; i++)
+    {
+        for (short j = begin_xy.second; j < end_xy.second; j++)
+        {
+            _mWin->movePrintWin({i, j}, " ");
+        }
+    }
+}
+
 
 
 clg_cursescpp::StyleWindow::StyleWindow(IWindow* window)

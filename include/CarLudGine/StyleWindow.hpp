@@ -2,12 +2,10 @@
 #pragma once
 
 #include "Config.hpp"
-#include <cstddef>
 
 namespace clg_cursescpp
 {
   class IWindow;
-  class IWindowPrint;
 
   extern const std::vector<std::pair<const char*, 
     const char*>> WALL_TYPES;
@@ -35,16 +33,13 @@ namespace clg_cursescpp
   class StyleWindow
   {
     public:
-      StyleWindow(const IWindow& window);
-      StyleWindow(WINDOW* window, 
-        const std::pair<short, short>& xy);
+      StyleWindow(IWindow* window);
       ~StyleWindow();
 
       
       void drawWall(const size_t lenght, 
         const bool isHorizontalOrVertical,
-        const std::pair<short, short>& whereWillStartingWall,
-        IWindowPrint& print); //* OK
+        const std::pair<short, short>& whereWillStartingWall); //* OK
       
       void decorateColor(const Color& color, const char ch);
       void headerWindow(const char* text);
@@ -54,6 +49,7 @@ namespace clg_cursescpp
 
     protected:
       const bool getIsHasColor();
+
 
       void generateWall(
         const bool isHorizontalOrVertical, 
@@ -69,9 +65,8 @@ namespace clg_cursescpp
       void setAttr(const unsigned attribute);
 
     private:
-      bool                           _isHasColor;
-      WINDOW*                        _win;
-      const std::pair<short, short>& _xy;
+      bool      _isHasColor;
+      IWindow*  _mWin;
 
   };
 

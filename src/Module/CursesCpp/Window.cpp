@@ -2,6 +2,7 @@
 #include "Window.hpp"
 
 #include <clocale>
+#include <utility>
 
 
 void clg_cursescpp::initScreen(const bool keypad)
@@ -33,7 +34,7 @@ WINDOW* clg_cursescpp::Window::getWindow() const {
 }
 
 void clg_cursescpp::Window::print(const char *text, va_list args, 
-    const std::pair<int, int>& xy)
+                         const std::pair<int, int>& xy)
 {
     ::wmove(_win, xy.second, xy.first);
     ::vw_printw(_win, text, args);
@@ -100,7 +101,6 @@ clg_cursescpp::Window::Window(const std::pair<int, int>& xy,
     ::box(_win, 0, 0);
 
 }
-
 
 clg_cursescpp::Window::~Window()
 {

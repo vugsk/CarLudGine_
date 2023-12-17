@@ -1,9 +1,12 @@
 
 #include "StyleWindow.hpp"
 
+#include "Config.hpp"
 #include "IWindow.hpp"
 #include <any>
 #include <cstddef>
+#include <cstring>
+#include <cwchar>
 #include <iostream>
 #include <utility>
 
@@ -58,8 +61,7 @@ void clg_cursescpp::StyleWindow::generateWall(
 
 void clg_cursescpp::StyleWindow::drawWall(const size_t lenght, 
     const bool isHorizontalOrVertical,
-    const std::pair<short, short>& whereWillStartingWall,
-    IWindowPrint& print)
+    const std::pair<short, short>& whereWillStartingWall)
 {
     std::vector<const char*> wallCh(lenght);
     generateWall(isHorizontalOrVertical, wallCh);
@@ -68,32 +70,28 @@ void clg_cursescpp::StyleWindow::drawWall(const size_t lenght,
     {
         if (isHorizontalOrVertical)
         {
-            print.movePrintWin({whereWillStartingWall.first-1, 
+            _mWin->movePrintWin({whereWillStartingWall.first-1, 
                 i+whereWillStartingWall.second-1}, wallCh[i]);
         }
         else
         {
-            print.movePrintWin({i+whereWillStartingWall.first-1, 
+            _mWin->movePrintWin({i+whereWillStartingWall.first-1, 
                 whereWillStartingWall.second-1}, wallCh[i]);
         }
     };
 }
 
 
-
-clg_cursescpp::StyleWindow::StyleWindow(const clg_cursescpp::IWindow& window)
-    : _win(window.getWindow())
-    , _xy(window.getXY())
+void clg_cursescpp::StyleWindow::headerWindow(const char* text)
 {
-    #if DEBUG
-        PRINT_CONSTRUCTED_DEBUG(STYLE_WINDOW_CL);
-    #endif
+    int x = (_mWin->getXY().first/2)-(wcslen(converterCharInWchar(text)));
+
+    _mWin->movePrintWin({x, 0}, "[ %s ]", text);
 }
 
-clg_cursescpp::StyleWindow::StyleWindow(WINDOW* window, 
-        const std::pair<short, short>& xy)
-    : _win(checkingForWindow(window))
-    , _xy(xy)
+
+clg_cursescpp::StyleWindow::StyleWindow(IWindow* window)
+    : _mWin(window)
 {
     #if DEBUG
         PRINT_CONSTRUCTED_DEBUG(STYLE_WINDOW_CL);

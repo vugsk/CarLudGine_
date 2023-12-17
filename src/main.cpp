@@ -1,12 +1,7 @@
 
-#include "Config.hpp"
 #include "StyleWindow.hpp"
-#include <Window.hpp>
 #include <ControlKeyboard.hpp>
-#include <functional>
-#include <utility>
-#include <vector>
-
+#include <Window.hpp>
 
 
 using namespace clg_cursescpp;
@@ -18,11 +13,14 @@ class MainWin : public Window, public ControlKeyboard, public StyleWindow
                 const std::pair<int, int>& lw)
             : Window(xy, lw)
             , ControlKeyboard(getWindow(), true, 0)
-            , StyleWindow(getWindow(), getXY()) {}
+            , StyleWindow(this) {}
 
-        ~MainWin() {}
+         ~MainWin() {}
 
 };
+
+void te(int ui)
+{}
 
 int main()
 {
@@ -39,9 +37,9 @@ int main()
     // win.eventKeyboard(fPrintInWindowText, 10);
 
 
-    win.drawWall(10, false, 
-        std::make_pair<short, short>(5, 1), win);
+    win.drawWall(10, true, {10, 1});
     
+    win.headerWindow("loihoi");
 
     win.getCh();
 

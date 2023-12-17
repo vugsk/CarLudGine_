@@ -9,7 +9,6 @@ namespace clg_cursescpp {
   void initScreen(const bool keypad);
 
   class Window : public virtual IWindow
-               , public virtual IWindowPrint
   {
     public:
       Window(const Window &);
@@ -29,9 +28,10 @@ namespace clg_cursescpp {
 
       void movePrintWin(const std::pair<int, int>& xy, 
         const char* text, ...) override final;
-      void printWin(const char* text, ...);
+      void printWin(const char* text, ...) override final;
 
     protected:
+
       void print(const char *text, va_list args, 
         const std::pair<int, int>& xy = NULL_XY);
       WINDOW* createWindow(const std::pair<int, int>& xy, 

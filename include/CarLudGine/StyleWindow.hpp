@@ -5,7 +5,11 @@
 
 namespace clg_cursescpp
 {
+
   class IWindow;
+
+  extern const char SKOBKI_LEFT;
+  extern const char SKOBKI_RIGHT;
 
   extern const std::vector<std::pair<const char*, 
     const char*>> WALL_TYPES;
@@ -17,15 +21,16 @@ namespace clg_cursescpp
     short blue;
   };
 
-  enum class Color: unsigned char
+  enum Color: short
   {
-    WHITE,
-    BLACK,
-    GREEN,
-    BLUE,
-    PURPLE,
-    YELLOW,
+    BLACK = 0,
     RED,
+    GREEN,
+    YELLOW,
+    BLUE,
+    MAGENTA,
+    CYAN,
+    WHITE,
   };
 
   // TODO: attribute
@@ -55,10 +60,11 @@ namespace clg_cursescpp
           std::vector<const char*>& vecSimbols,
           const size_t size = 0); //* OK
       
-      void startColor();
-      void initPairColor(short pair_number, 
-        short foreground, short background);
-      void colorPair(int pair_number);
+      void startColor(); //* OK
+      
+      void initPairColor(const short pair_number, 
+        const short foreground, const short background);
+      unsigned long colorPair(const int pairNumber);
       void initColor(short color_number, const ColorRgb& rgb);
       void attr(const bool on_off, const unsigned attribute);
       void setAttr(const unsigned attribute);

@@ -1,8 +1,9 @@
 
 #include "StyleWindow.hpp"
-
 #include "IWindow.hpp"
 
+const char clg_cursescpp::SKOBKI_LEFT = '[';
+const char clg_cursescpp::SKOBKI_RIGHT = ']';
 
 const std::vector<std::pair<const char*, 
     const char*>> clg_cursescpp::WALL_TYPES = {
@@ -78,9 +79,7 @@ void clg_cursescpp::StyleWindow::drawWall(const size_t lenght,
 void clg_cursescpp::StyleWindow::headerWindow(const char* text)
 {
     int x = (_mWin->getXY().first/2)-(wcslen(converterCharInWchar(text)));
-
-    //! [ ] -> global
-    _mWin->movePrintWin({x, 0}, "[ %s ]", text);
+    _mWin->movePrintWin({x, 0}, "%c %s %c", SKOBKI_LEFT, text, SKOBKI_RIGHT);
 }
 
 
@@ -98,7 +97,21 @@ void clg_cursescpp::StyleWindow::clear(const std::pair<short, short>& begin_xy,
     }
 }
 
+void clg_cursescpp::StyleWindow::decorateColor(const Color& color, const char ch)
+{
 
+
+
+}
+
+void clg_cursescpp::StyleWindow::startColor() { ::start_color(); }
+
+//! fix
+void clg_cursescpp::StyleWindow::initPairColor(const short pair_number, const short foreground, 
+    const short background) { ::init_pair(pair_number, foreground, background); }
+
+//! fix
+unsigned long clg_cursescpp::StyleWindow::colorPair(const int pairNumber) { return COLOR_PAIR(pairNumber); }
 
 clg_cursescpp::StyleWindow::StyleWindow(IWindow* window)
     : _mWin(window)

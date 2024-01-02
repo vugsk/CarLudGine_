@@ -1,14 +1,11 @@
 
-
-
 #include "ControlKeyboard.hpp"
-
 #include "IWindow.hpp"
 
 
-const char clg_cursescpp::DOWN  = convertTypeData<char>(KEY_DOWN);; // стрелка вниз   
-const char clg_cursescpp::UP    = convertTypeData<char>(KEY_UP);; // стрелка вверх       
-const char clg_cursescpp::LEFT  = convertTypeData<char>(KEY_LEFT);; // стрелка влево   
+const char clg_cursescpp::DOWN  = convertTypeData<char>(KEY_DOWN); // стрелка вниз
+const char clg_cursescpp::UP    = convertTypeData<char>(KEY_UP); // стрелка вверх
+const char clg_cursescpp::LEFT  = convertTypeData<char>(KEY_LEFT); // стрелка влево
 const char clg_cursescpp::RIGHT = convertTypeData<char>(KEY_RIGHT); // стрелка вправо 
 
 const char clg_cursescpp::KEY_W = 119;
@@ -22,39 +19,27 @@ const char clg_cursescpp::ESC   = 27;
 const char clg_cursescpp::ENTER = 10;
 
 
-/*
-
-    class ControlKeyboard
-
-*/
-
-/*
-
-    Public
-
-*/
-
-void clg_cursescpp::ControlKeyboard::scanWin(const char *str, ...)
+void clg_cursescpp::ControlKeyboard::scanWin(const char *text, ...) const
 {
     va_list args;
-    va_start(args, str);
-    scan(str, args,  _win);
+    va_start(args, text);
+    scan(text, args,  _win);
     va_end(args);
 }
 
 void clg_cursescpp::ControlKeyboard::moveScanWin(const std::pair<int, int>& xy, 
-    const char *str, ...)
+    const char *text, ...) const
 {
     va_list args;
-    va_start(args, str);
-    scan(str, args, _win, xy);
+    va_start(args, text);
+    scan(text, args, _win, xy);
     va_end(args);
 }
 
-const char clg_cursescpp::ControlKeyboard::getCh() { return ::wgetch(_win); }
+int clg_cursescpp::ControlKeyboard::getCh() const { return ::wgetch(_win); }
 
-void clg_cursescpp::ControlKeyboard::eventKeyboard(std::function<void()> func, 
-    const char button)
+void clg_cursescpp::ControlKeyboard::eventKeyboard(
+    const std::function<void()>& func, const char button) const
 {
     if (button == getCh())
     {
@@ -68,7 +53,6 @@ void clg_cursescpp::ControlKeyboard::echo(const bool no_off)
     {
         ::noecho();
     }
-
     ::echo();
 }
 
@@ -77,19 +61,20 @@ void clg_cursescpp::ControlKeyboard::curs(const int a)
     ::curs_set(a);
 }
 
-clg_cursescpp::ControlKeyboard::ControlKeyboard(clg_cursescpp::IWindow& window, 
-    const bool echo_no_off, const bool curs_a)
+clg_cursescpp::ControlKeyboard::ControlKeyboard(
+    const clg_cursescpp::IWindow& window, const bool echo_no_off,
+    const bool curs_a)
 {
     #if DEBUG
         PRINT_CONSTRUCTED_DEBUG(CONTROL_KEYBOARD_CL);
     #endif
 
     _win = window.getWindow();
-    echo(true);
-    curs(0);
+    echo(echo_no_off);
+    curs(curs_a);
 }
 
-clg_cursescpp::ControlKeyboard::ControlKeyboard(WINDOW* window, 
+clg_cursescpp::ControlKeyboard::ControlKeyboard(WINDOW* window,
     const bool echo_no_off, const bool curs_a)
         : _win(checkingForWindow(window))
 {
@@ -97,8 +82,8 @@ clg_cursescpp::ControlKeyboard::ControlKeyboard(WINDOW* window,
         PRINT_CONSTRUCTED_DEBUG(CONTROL_KEYBOARD_CL);
     #endif
 
-    echo(true);
-    curs(0);
+    echo(echo_no_off);
+    curs(curs_a);
 }
 
 clg_cursescpp::ControlKeyboard::~ControlKeyboard()
@@ -114,8 +99,8 @@ clg_cursescpp::ControlKeyboard::~ControlKeyboard()
 
 */
 
-inline void clg_cursescpp::ControlKeyboard::scan(const char *str, va_list args, 
-    WINDOW *window, const std::pair<int, int>& xy)
+void clg_cursescpp::ControlKeyboard::scan(const char *str,
+    va_list args, WINDOW *window, const std::pair<int, int>& xy)
 {
     wmove(window, xy.second, xy.first);
     vw_scanw(window, str, args);

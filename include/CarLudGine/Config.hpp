@@ -2,10 +2,9 @@
 #pragma once
 
 #include <utility>
-#include <functional>
 #include <vector>
 #include <curses.h>
-
+#include <functional>
 
 
 #define DEBUG false
@@ -36,7 +35,6 @@
 
 namespace clg_cursescpp
 {
- 
   extern const std::pair<int, int> NULL_XY;
   extern const std::pair<short, short> NULL_XY_int16;
   extern std::pair<int, int> MAX_SCREEN_XY;
@@ -47,7 +45,7 @@ namespace clg_cursescpp
   T1 convertTypeData(T2 data) { return static_cast<T1>(data); }
   
   template<typename T1, typename T2>
-  const std::pair<T1, T1> convertStructPairNum(
+  std::pair<T1, T1> convertStructPairNum(
     const std::pair<T2, T2>& data)
   {
     return std::make_pair(
@@ -57,5 +55,11 @@ namespace clg_cursescpp
   }
 
   WINDOW* checkingForWindow(WINDOW* window);
+}
+
+namespace clg_parserfilescpp
+{
+
+
 
 }

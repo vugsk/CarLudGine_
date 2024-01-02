@@ -1,68 +1,48 @@
 
-#include "StyleWindow.hpp"
-#include <ControlKeyboard.hpp>
-#include <Window.hpp>
-#include <curses.h>
+#include <Parser.hpp>
 #include <iostream>
+#include <stack>
 
+using namespace clg_parserfilescpp;
 
-using namespace clg_cursescpp;
+std::stack<std::string> st_key;
+std::stack<nlohmann::json> st_data;
 
-class MainWin : public Window
-              , public ControlKeyboard
-              , public StyleWindow
-{
-    public:
-        MainWin(const std::pair<int, int>& xy, 
-                const std::pair<int, int>& lw)
-            : Window(xy, lw)
-            , ControlKeyboard(getWindow(), true, 0)
-            , StyleWindow(this)
+template<typename T>
+T test_r(const std::string& key, const nlohmann::json& data = nullptr, const bool test = false) {
+    if (!test) st_data.push(data);
+    for (auto& [keys, values]: data.items())
+    {
+        if (keys == key) break;
+        if (keys != key && !st_data.top().empty() && !values.is_object())
         {
-            startColor();
+            st_data.top().erase(keys);
+            continue;
         }
-
-        // void test()
-        // {
-        //     initPairColor(1, Color::BLACK, Color::WHITE);
-        //     wbkgd(getWindow(), colorPair(1));
-        // }
-
-         ~MainWin() {}
-
-};
+        if (values.is_object()) {
+            st_key.push(keys);
+            return test_r<T>(key, values);
+        }
+    }
+    if (st_data.top().is_object() && st_data.top().empty())
+    {
+        st_data.pop();
+        st_data.top().erase(st_key.top());
+        st_key.pop();
+        return test_r<T>(key, st_data.top(), true);
+    }
+    return data[key];
+}
 
 int main()
 {
-    initScreen(true);
 
-    // init_pair(1, Color::BLUE, Color::RED);
-    // bkgd(COLOR_PAIR(1));
+    const int ui = read<int>("Setting_game.json", "l",
+        [](const char* key, const nlohmann::json& data) {
+            return test_r<int>(key, data);
+    });
 
-    MainWin win({50, 10}, {25, 5});
-
-    // win.test();
-
-    // win.decorateColor(Color::BLACK, 'o');
-
-    // const auto fPrintInWindowText = [&win]()
-    // {
-    //     win.movePrintWin({0, 0}, "kdfl");
-    // };
-
-    // win.eventKeyboard(fPrintInWindowText, 10);
-
-
-
-    // win.drawWall(10, true, {10, 1});
-    
-    // win.headerWindow("loihoi");
-
-
-
-    win.getCh();
-
-    win.close();
+    std::cout << ui << std::endl;
 
     return 0;
 }

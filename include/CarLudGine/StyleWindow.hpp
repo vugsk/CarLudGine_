@@ -38,43 +38,36 @@ namespace clg_cursescpp
   class StyleWindow
   {
     public:
-      StyleWindow(IWindow* window);
+      explicit StyleWindow(IWindow* window);
       ~StyleWindow();
 
-      void drawWall(const size_t lenght, 
-        const bool isHorizontalOrVertical,
-        const std::pair<short, short>& whereWillStartingWall); //* OK
+      void drawWall(size_t lenght, bool isHorizontalOrVertical,
+        const std::pair<short, short>& whereWillStartingWall) const; //* OK
       
-      void decorateColor(const Color& color, const char ch);
-      void headerWindow(const char* text); //* OK
-      void clear(); //* OK
+      static void decorateColor(const Color& color, char ch);
+      void headerWindow(const char* text) const; //* OK
+      void clear() const; //* OK
       void clear(const std::pair<short, short>& begin_xy, 
-        const std::pair<short, short>& end_xy); //* OK
+        const std::pair<short, short>& end_xy) const; //* OK
 
     protected:
-      const bool getIsHasColor();
+      [[nodiscard]] bool getIsHasColor() const;
 
-
-      void generateWall(
-        const bool isHorizontalOrVertical, 
-          std::vector<const char*>& vecSimbols,
-          const size_t size = 0); //* OK
+      static void generateWall(bool isHorizontalOrVertical,
+        std::vector<const char*>& vecSimbols, size_t size = 0); //* OK
       
-      void startColor(); //* OK
-      
-      void initPairColor(const short pair_number, 
-        const short foreground, const short background);
-      unsigned long colorPair(const int pairNumber);
+      static void startColor(); //* OK
+      static void initPairColor(short pair_number, short foreground,
+        short background);
+      static unsigned long colorPair(int pairNumber);
       void initColor(short color_number, const ColorRgb& rgb);
-      void attr(const bool on_off, const unsigned attribute);
-      void setAttr(const unsigned attribute);
+      void attr(bool on_off, unsigned attribute);
+      void setAttr(unsigned attribute);
 
     private:
-      bool      _isHasColor;
+      bool      _isHasColor{};
       IWindow*  _mWin;
-
   };
-
 }
 
 

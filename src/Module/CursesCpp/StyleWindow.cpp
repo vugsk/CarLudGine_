@@ -13,7 +13,7 @@ const std::vector<std::pair<const char*,
 };
 
 
-const bool clg_cursescpp::StyleWindow::getIsHasColor()
+bool clg_cursescpp::StyleWindow::getIsHasColor() const
 {
     return _isHasColor;
 }
@@ -55,7 +55,7 @@ void clg_cursescpp::StyleWindow::generateWall(
 
 void clg_cursescpp::StyleWindow::drawWall(const size_t lenght, 
     const bool isHorizontalOrVertical,
-    const std::pair<short, short>& whereWillStartingWall)
+    const std::pair<short, short>& whereWillStartingWall) const
 {
     std::vector<const char*> wallCh(lenght);
     generateWall(isHorizontalOrVertical, wallCh);
@@ -76,17 +76,19 @@ void clg_cursescpp::StyleWindow::drawWall(const size_t lenght,
 }
 
 
-void clg_cursescpp::StyleWindow::headerWindow(const char* text)
+void clg_cursescpp::StyleWindow::headerWindow(const char* text) const
 {
-    int x = (_mWin->getXY().first/2)-(wcslen(converterCharInWchar(text)));
-    _mWin->movePrintWin({x, 0}, "%c %s %c", SKOBKI_LEFT, text, SKOBKI_RIGHT);
+    int x = (convertTypeData<int>(_mWin->getXY().first)/2) -
+        (convertTypeData<int>(wcslen(converterCharInWchar(text))));
+    _mWin->movePrintWin({x, 0}, "%c %s %c",
+        SKOBKI_LEFT, text, SKOBKI_RIGHT);
 }
 
 
-void clg_cursescpp::StyleWindow::clear() { ::wclear(_mWin->getWindow()); }
+void clg_cursescpp::StyleWindow::clear() const { ::wclear(_mWin->getWindow()); }
 
 void clg_cursescpp::StyleWindow::clear(const std::pair<short, short>& begin_xy, 
-    const std::pair<short, short>& end_xy)
+    const std::pair<short, short>& end_xy) const
 {
     for (short i = begin_xy.first; i < end_xy.first; i++)
     {
@@ -107,11 +109,17 @@ void clg_cursescpp::StyleWindow::decorateColor(const Color& color, const char ch
 void clg_cursescpp::StyleWindow::startColor() { ::start_color(); }
 
 //! fix
-void clg_cursescpp::StyleWindow::initPairColor(const short pair_number, const short foreground, 
-    const short background) { ::init_pair(pair_number, foreground, background); }
+void clg_cursescpp::StyleWindow::initPairColor(const short pair_number,
+    const short foreground, const short background)
+{
+    ::init_pair(pair_number, foreground, background);
+}
 
 //! fix
-unsigned long clg_cursescpp::StyleWindow::colorPair(const int pairNumber) { return COLOR_PAIR(pairNumber); }
+unsigned long clg_cursescpp::StyleWindow::colorPair(const int pairNumber)
+{
+    return COLOR_PAIR(pairNumber);
+}
 
 clg_cursescpp::StyleWindow::StyleWindow(IWindow* window)
     : _mWin(window)

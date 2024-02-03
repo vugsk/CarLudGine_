@@ -1,0 +1,16 @@
+
+interface:
+  startMenu:
+    title: TestMenu
+    menu:
+      - start
+      - setting
+      - about
+      - exit
+  menuPlayer:
+    - inventory
+    - skills
+
+Person:
+  name: nik
+  age: 20

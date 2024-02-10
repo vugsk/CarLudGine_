@@ -5,6 +5,21 @@
 #include <bits/fs_ops.h>
 #include <bits/fs_path.h>
 
+#include <Config.hpp>
+
+clg_parserfilescpp::ParserJsonFiles::ParserJsonFiles()
+{
+	#if DEBUG_PARSER_FILE_JSON
+		PRINT_CONSTRUCTED_DEBUG(PARSER_JSON_FILES_CL);
+	#endif
+}
+
+clg_parserfilescpp::ParserJsonFiles::~ParserJsonFiles()
+{
+	#if DEBUG_PARSER_FILE_JSON
+		PRINT_DESTRUCTED_DEBUG(PARSER_JSON_FILES_CL)
+	#endif
+}
 
 void clg_parserfilescpp::ParserJsonFiles::close(const char* name)
 {
@@ -26,7 +41,7 @@ nlohmann::json clg_parserfilescpp::ParserJsonFiles::getDataWriteInFile() const
 	return _dataWriteInFile;
 }
 
-nlohmann::json clg_parserfilescpp::ParserJsonFiles::readInFile(const char *name)
+nlohmann::json clg_parserfilescpp::ParserJsonFiles::readInFile(const char* name)
 {
 	std::ifstream file(name);
 	nlohmann::json data = nlohmann::json::parse(file);
@@ -34,7 +49,7 @@ nlohmann::json clg_parserfilescpp::ParserJsonFiles::readInFile(const char *name)
 	return data;
 }
 
-void clg_parserfilescpp::ParserJsonFiles::writeInFile(const char *name) const
+void clg_parserfilescpp::ParserJsonFiles::writeInFile(const char* name) const
 {
 	std::ofstream file(name);
 	file << _dataWriteInFile.dump(4);

@@ -1,6 +1,7 @@
 
 #pragma once
 
+
 namespace clg_SoungControl
 {
 
@@ -9,5 +10,5 @@ namespace clg_SoungControl
 
 	};
 
-} // clg_SoungControl
+}
 

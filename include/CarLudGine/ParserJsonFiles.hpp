@@ -10,8 +10,8 @@ namespace clg_parserfilescpp
 	class ParserJsonFiles
 	{
 	public:
-		ParserJsonFiles()								  = default;
-		~ParserJsonFiles()								  = default;
+		ParserJsonFiles();
+		~ParserJsonFiles();
 		ParserJsonFiles(const ParserJsonFiles& other)	  = delete;
 		ParserJsonFiles(ParserJsonFiles&& other) noexcept = delete;
 
@@ -26,8 +26,8 @@ namespace clg_parserfilescpp
 		void close(const char* name);
 
 	private:
-		nlohmann::json _dataWriteInFile;
-		std::stack<const char*> st_key;
+		nlohmann::json			   _dataWriteInFile;
+		std::stack<const char*>    st_key;
 		std::stack<nlohmann::json> st_data;
 
 	protected:
@@ -55,7 +55,7 @@ namespace clg_parserfilescpp
   		    					&& !values.is_object())
   			    {
   			        st_data.top().erase(keys);
-  			        continue;
+  			    	continue;
   			    }
   			    if (values.is_object())
   			    {

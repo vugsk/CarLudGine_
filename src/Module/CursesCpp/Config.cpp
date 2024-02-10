@@ -22,7 +22,7 @@ const wchar_t* clg_cursescpp::converterCharInWchar(const char* ch)
     return wc;
 }
 
-WINDOW* clg_cursescpp::checkingForWindow(WINDOW* window)
+clg_cursescpp::WINDOW* clg_cursescpp::checkingForWindow(WINDOW* window)
 {
     return window ? window : nullptr;
 }

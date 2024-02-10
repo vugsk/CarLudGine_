@@ -78,14 +78,14 @@ void clg_cursescpp::StyleWindow::drawWall(const size_t lenght,
 
 void clg_cursescpp::StyleWindow::headerWindow(const char* text) const
 {
-    int x = (convertTypeData<int>(_mWin->getXY().first)/2) -
-        (convertTypeData<int>(wcslen(converterCharInWchar(text))));
+    int x = (ConvertTypeData<int>(_mWin->getXY().first)/2) -
+        (ConvertTypeData<int>(wcslen(converterCharInWchar(text))));
     _mWin->movePrintWin({x, 0}, "%c %s %c",
         SKOBKI_LEFT, text, SKOBKI_RIGHT);
 }
 
 
-void clg_cursescpp::StyleWindow::clear() const { ::wclear(_mWin->getWindow()); }
+void clg_cursescpp::StyleWindow::clear() const { ::clg_cursescpp::wclear(_mWin->getWindow()); }
 
 void clg_cursescpp::StyleWindow::clear(const std::pair<short, short>& begin_xy, 
     const std::pair<short, short>& end_xy) const
@@ -106,13 +106,13 @@ void clg_cursescpp::StyleWindow::decorateColor(const Color& color, const char ch
 
 }
 
-void clg_cursescpp::StyleWindow::startColor() { ::start_color(); }
+void clg_cursescpp::StyleWindow::startColor() { ::clg_cursescpp::start_color(); }
 
 //! fix
 void clg_cursescpp::StyleWindow::initPairColor(const short pair_number,
     const short foreground, const short background)
 {
-    ::init_pair(pair_number, foreground, background);
+    ::clg_cursescpp::init_pair(pair_number, foreground, background);
 }
 
 //! fix
@@ -124,14 +124,14 @@ unsigned long clg_cursescpp::StyleWindow::colorPair(const int pairNumber)
 clg_cursescpp::StyleWindow::StyleWindow(IWindow* window)
     : _mWin(window)
 {
-    #if DEBUG
+    #if DEBUG_CURSES_CPP
         PRINT_CONSTRUCTED_DEBUG(STYLE_WINDOW_CL);
     #endif
 }
 
 clg_cursescpp::StyleWindow::~StyleWindow()
 {
-    #if DEBUG
+    #if DEBUG_CURSES_CPP
         PRINT_DESTRUCTED_DEBUG(STYLE_WINDOW_CL);
     #endif
 }

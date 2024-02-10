@@ -3,10 +3,10 @@
 #include "IWindow.hpp"
 
 
-const char clg_cursescpp::DOWN  = convertTypeData<char>(KEY_DOWN); // стрелка вниз
-const char clg_cursescpp::UP    = convertTypeData<char>(KEY_UP); // стрелка вверх
-const char clg_cursescpp::LEFT  = convertTypeData<char>(KEY_LEFT); // стрелка влево
-const char clg_cursescpp::RIGHT = convertTypeData<char>(KEY_RIGHT); // стрелка вправо 
+const char clg_cursescpp::DOWN  = ConvertTypeData<char>(KEY_DOWN); // стрелка вниз
+const char clg_cursescpp::UP    = ConvertTypeData<char>(KEY_UP); // стрелка вверх
+const char clg_cursescpp::LEFT  = ConvertTypeData<char>(KEY_LEFT); // стрелка влево
+const char clg_cursescpp::RIGHT = ConvertTypeData<char>(KEY_RIGHT); // стрелка вправо 
 
 const char clg_cursescpp::KEY_W = 119;
 const char clg_cursescpp::KEY_A = 97;
@@ -36,7 +36,7 @@ void clg_cursescpp::ControlKeyboard::moveScanWin(const std::pair<int, int>& xy,
     va_end(args);
 }
 
-int clg_cursescpp::ControlKeyboard::getCh() const { return ::wgetch(_win); }
+int clg_cursescpp::ControlKeyboard::getCh() const { return ::clg_cursescpp::wgetch(_win); }
 
 void clg_cursescpp::ControlKeyboard::eventKeyboard(
     const std::function<void()>& func, const char button) const
@@ -51,21 +51,21 @@ void clg_cursescpp::ControlKeyboard::echo(const bool no_off)
 {
     if (!no_off)
     {
-        ::noecho();
+        ::clg_cursescpp::noecho();
     }
-    ::echo();
+    ::clg_cursescpp::echo();
 }
 
 void clg_cursescpp::ControlKeyboard::curs(const int a)
 {
-    ::curs_set(a);
+    ::clg_cursescpp::curs_set(a);
 }
 
 clg_cursescpp::ControlKeyboard::ControlKeyboard(
     const clg_cursescpp::IWindow& window, const bool echo_no_off,
     const bool curs_a)
 {
-    #if DEBUG
+    #if DEBUG_CURSES_CPP
         PRINT_CONSTRUCTED_DEBUG(CONTROL_KEYBOARD_CL);
     #endif
 
@@ -78,7 +78,7 @@ clg_cursescpp::ControlKeyboard::ControlKeyboard(WINDOW* window,
     const bool echo_no_off, const bool curs_a)
         : _win(checkingForWindow(window))
 {
-    #if DEBUG
+    #if DEBUG_CURSES_CPP
         PRINT_CONSTRUCTED_DEBUG(CONTROL_KEYBOARD_CL);
     #endif
 
@@ -88,7 +88,7 @@ clg_cursescpp::ControlKeyboard::ControlKeyboard(WINDOW* window,
 
 clg_cursescpp::ControlKeyboard::~ControlKeyboard()
 {
-    #if DEBUG
+    #if DEBUG_CURSES_CPP
         PRINT_DESTRUCTED_DEBUG(CONTROL_KEYBOARD_CL);
     #endif
 }

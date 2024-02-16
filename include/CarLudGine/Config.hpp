@@ -48,8 +48,7 @@ template<typename T1, typename T2>
 T1 ConvertTypeData(T2 data) { return static_cast<T1>(data); }
 
 template<typename T1, typename T2>
-std::pair<T1, T1> ConvertStructPairNum(
-  const std::pair<T2, T2>& data)
+std::pair<T1, T1> ConvertStructPairNum(const std::pair<T2, T2>& data)
 {
   return std::make_pair(
     ConvertTypeData<T1>(data.first),
@@ -57,19 +56,19 @@ std::pair<T1, T1> ConvertStructPairNum(
   );
 }
 
-inline const char* add_char(const char *a, const char *b)
+inline const char* AddChar(const char *first_summand, const char *second_summand)
 {
-  const auto ab = new char[strlen(a) + strlen(b)];
+  const auto ab = new char[strlen(first_summand) + strlen(second_summand)];
   auto count = 0;
 
-  for (auto i = 0; i < strlen(a); i++)
+  for (auto i = 0; i < strlen(first_summand); i++)
   {
-    ab[count++] = a[i];
+    ab[count++] = first_summand[i];
   }
 
-  for (auto i = 0; i < strlen(b); i++)
+  for (auto i = 0; i < strlen(second_summand); i++)
   {
-    ab[count++] = b[i];
+    ab[count++] = second_summand[i];
   }
 
   return ab;
@@ -85,13 +84,12 @@ namespace clg_cursescpp
   extern std::pair<int, int> MAX_SCREEN_XY;
 
   const wchar_t* converterCharInWchar(const char* ch);
-
-  WINDOW* checkingForWindow(WINDOW* window);
 }
 
 namespace clg_parserfilescpp
 {
-  static inline const std::unordered_map<std::type_index, const std::string> type_name
+  static inline const std::unordered_map<std::type_index,
+    const std::string> typeName
   {
   	{std::type_index(typeid(int)), "int"},
   	{std::type_index(typeid(double)), "double"},

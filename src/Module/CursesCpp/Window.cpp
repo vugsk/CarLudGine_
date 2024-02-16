@@ -1,5 +1,6 @@
 
 #include "Window.hpp"
+
 #include <clocale>
 
 void clg_cursescpp::initScreen(const bool keypad)
@@ -27,10 +28,10 @@ void clg_cursescpp::Window::print(const char *text, va_list args,
 
 clg_cursescpp::WINDOW* clg_cursescpp::Window::createWindow(
     const std::pair<int, int>& xy,
-    const std::pair<int, int>& widthAndLength)
+    const std::pair<int, int>& size)
 {
     return ::clg_cursescpp::newwin(xy.second, xy.first,
-        widthAndLength.second, widthAndLength.first);
+        size.second, size.first);
 }
 
 
@@ -63,9 +64,9 @@ void clg_cursescpp::Window::printWin(const char* text, ...)
 
 
 clg_cursescpp::Window::Window(const std::pair<int, int>& xy, 
-        const std::pair<int, int>& lw)
-    : _xy(ConvertStructPairNum<short>(xy))
-    , _win(createWindow(xy, lw))
+        const std::pair<int, int>& size)
+    : _win(createWindow(xy, size))
+    , _xy(ConvertStructPairNum<short>(xy))
 {
 
     #if DEBUG_CURSES_CPP
@@ -86,17 +87,21 @@ clg_cursescpp::Window::~Window()
 }
 
 clg_cursescpp::Window::Window(const Window &other)
-    : _win(!other._win ? new WINDOW(*other._win) : nullptr)
-    , _xy(other._xy)
+    : _xy(other._xy)
 {
+    if (other._win != nullptr)
+    {
+        _win = new WINDOW(*other._win);
+    }
+
     #if DEBUG_CURSES_CPP
         PRINT_COPY_DEBUG(WINDOW_CL);
     #endif
 }
 
 clg_cursescpp::Window::Window(Window&& other) noexcept 
-    : _xy(std::move(other._xy))
-    , _win(other._win)
+    : _win(other._win)
+    , _xy(std::move(other._xy))
 {
     #if DEBUG_CURSES_CPP
         PRINT_MOVE_DEBUG(WINDOW_CL);

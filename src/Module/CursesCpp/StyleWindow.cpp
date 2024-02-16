@@ -2,14 +2,13 @@
 #include "StyleWindow.hpp"
 #include "IWindow.hpp"
 
-const char clg_cursescpp::SKOBKI_LEFT = '[';
-const char clg_cursescpp::SKOBKI_RIGHT = ']';
+const char clg_cursescpp::SQUARE_BRACKET_LEFT = '[';
+const char clg_cursescpp::SQUARE_BRACKET_RIGHT = ']';
 
-const std::vector<std::pair<const char*, 
-    const char*>> clg_cursescpp::WALL_TYPES = {
-        std::make_pair("│", "─"),
-        std::make_pair("┬", "├"),
-        std::make_pair("┴", "┤")
+const std::vector<std::pair<const char*, const char*>> clg_cursescpp::WALL_TYPES = {
+    {"│", "─"},
+    {"┬", "├"},
+    {"┴", "┤"}
 };
 
 
@@ -19,33 +18,36 @@ bool clg_cursescpp::StyleWindow::getIsHasColor() const
 }
 
 void clg_cursescpp::StyleWindow::generateWall(
-    const bool isHorizontalOrVertical, 
-    std::vector<const char*>& vecSimbols, const size_t size)
+    const bool is_horizontal_or_vertical,
+    std::vector<const char*>& vec_simbols, const size_t size)
 {
 
-    if (size > 0) vecSimbols.resize(size);  
+    if (size > 0)
+    {
+        vec_simbols.resize(size);
+    }
 
-    auto est = [&vecSimbols, isHorizontalOrVertical](
+    auto est = [&vec_simbols, is_horizontal_or_vertical](
         const std::pair<const char*, const char*>& pair) 
     {
         const char* horizontalOrVerticalSimbolWall = 
-            isHorizontalOrVertical? pair.first
+            is_horizontal_or_vertical? pair.first
                                   : pair.second;
 
         if (WALL_TYPES[0] == pair)
         {
-            for (size_t i = 1; i < vecSimbols.size()-1; i++)
+            for (size_t i = 1; i < vec_simbols.size() - 1; i++)
             {
-                vecSimbols[i] = horizontalOrVerticalSimbolWall;
+                vec_simbols[i] = horizontalOrVerticalSimbolWall;
             }
         }
         else if (WALL_TYPES[1] == pair)
         {
-            vecSimbols[0] = horizontalOrVerticalSimbolWall;
+            vec_simbols[0] = horizontalOrVerticalSimbolWall;
         }
         else if (WALL_TYPES[2] == pair)
         {
-            vecSimbols[vecSimbols.size()-1] = horizontalOrVerticalSimbolWall;
+            vec_simbols[vec_simbols.size() - 1] = horizontalOrVerticalSimbolWall;
         }
     };
 
@@ -54,23 +56,23 @@ void clg_cursescpp::StyleWindow::generateWall(
 }
 
 void clg_cursescpp::StyleWindow::drawWall(const size_t lenght, 
-    const bool isHorizontalOrVertical,
-    const std::pair<short, short>& whereWillStartingWall) const
+    const bool is_horizontal_or_vertical,
+    const std::pair<short, short>& where_will_starting_wall) const
 {
     std::vector<const char*> wallCh(lenght);
-    generateWall(isHorizontalOrVertical, wallCh);
+    generateWall(is_horizontal_or_vertical, wallCh);
 
-    for (int i = 0; i < lenght; i++)
+    for (auto i = 0; i < lenght; i++)
     {
-        if (isHorizontalOrVertical)
+        if (is_horizontal_or_vertical)
         {
-            _mWin->movePrintWin({whereWillStartingWall.first-1, 
-                i+whereWillStartingWall.second-1}, wallCh[i]);
+            _mWin->movePrintWin({where_will_starting_wall.first - 1,
+                i + where_will_starting_wall.second - 1}, wallCh[i]);
         }
         else
         {
-            _mWin->movePrintWin({i+whereWillStartingWall.first-1, 
-                whereWillStartingWall.second-1}, wallCh[i]);
+            _mWin->movePrintWin({i + where_will_starting_wall.first - 1,
+                where_will_starting_wall.second - 1}, wallCh[i]);
         }
     };
 }
@@ -78,14 +80,15 @@ void clg_cursescpp::StyleWindow::drawWall(const size_t lenght,
 
 void clg_cursescpp::StyleWindow::headerWindow(const char* text) const
 {
-    int x = (ConvertTypeData<int>(_mWin->getXY().first)/2) -
+    int x = (ConvertTypeData<int>(_mWin->getXY().first) / 2) -
         (ConvertTypeData<int>(wcslen(converterCharInWchar(text))));
     _mWin->movePrintWin({x, 0}, "%c %s %c",
-        SKOBKI_LEFT, text, SKOBKI_RIGHT);
+        SQUARE_BRACKET_LEFT, text, SQUARE_BRACKET_RIGHT);
 }
 
 
-void clg_cursescpp::StyleWindow::clear() const { ::clg_cursescpp::wclear(_mWin->getWindow()); }
+void clg_cursescpp::StyleWindow::clear() const
+    { ::clg_cursescpp::wclear(_mWin->getWindow()); }
 
 void clg_cursescpp::StyleWindow::clear(const std::pair<short, short>& begin_xy, 
     const std::pair<short, short>& end_xy) const
@@ -116,9 +119,9 @@ void clg_cursescpp::StyleWindow::initPairColor(const short pair_number,
 }
 
 //! fix
-unsigned long clg_cursescpp::StyleWindow::colorPair(const int pairNumber)
+unsigned long clg_cursescpp::StyleWindow::colorPair(const int pair_number)
 {
-    return COLOR_PAIR(pairNumber);
+    return COLOR_PAIR(pair_number);
 }
 
 clg_cursescpp::StyleWindow::StyleWindow(IWindow* window)

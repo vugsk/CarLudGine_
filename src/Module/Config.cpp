@@ -21,8 +21,3 @@ const wchar_t* clg_cursescpp::converterCharInWchar(const char* ch)
     mbstowcs (wc, ch, cSize);
     return wc;
 }
-
-clg_cursescpp::WINDOW* clg_cursescpp::checkingForWindow(WINDOW* window)
-{
-    return window ? window : nullptr;
-}

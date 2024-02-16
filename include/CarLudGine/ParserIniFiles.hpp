@@ -28,8 +28,8 @@ namespace clg_parserfilescpp
 		template<typename T, typename T2 = std::string>
 		T read_v(const char* name, const char* key)
 		{
-			const char* rt = add_char(key, ".len");
-			const char* ty = add_char(key, ".key");
+			const char* rt = AddChar(key, ".len");
+			const char* ty = AddChar(key, ".key");
 
 			T dataVector(read<int>(name, rt));
 			for (auto i = 0; i < dataVector.size(); i++)

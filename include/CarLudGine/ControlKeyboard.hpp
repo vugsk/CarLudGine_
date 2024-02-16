@@ -25,17 +25,18 @@ namespace clg_cursescpp {
   class ControlKeyboard
   {
     public:
-      ControlKeyboard(const IWindow& window, bool echo_no_off, bool curs_a);
-      ControlKeyboard(WINDOW* window, bool echo_no_off, bool curs_a);
+      ControlKeyboard(const IWindow& window, bool is_echo_no_off, bool is_curs);
+      ControlKeyboard(WINDOW* window, bool is_echo_no_off, bool is_curs);
       ~ControlKeyboard();
 
-      void scanWin(const char* text, ...) const;
-      void moveScanWin(const std::pair<int, int>& xy, const char* text, ...) const;
-      void eventKeyboard(const std::function<void()>& func, char button) const;
+      void scanWin(const char* format, ...) const;
+      void moveScanWin(const std::pair<int, int>& xy, const char* format, ...) const;
+      void eventKeyboard(const std::function<void()>& event,
+        char button_sibols) const;
       
       [[nodiscard]] int getCh() const;
-      static void echo(bool no_off);
-      static void curs(int a);
+      static void echo(bool is_no_off);
+      static void curs(int num);
 
     protected:
       static void scan(const char *str, va_list args,

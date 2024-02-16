@@ -8,11 +8,10 @@ namespace clg_cursescpp
 
   class IWindow;
 
-  extern const char SKOBKI_LEFT;
-  extern const char SKOBKI_RIGHT;
+  extern const char SQUARE_BRACKET_LEFT;
+  extern const char SQUARE_BRACKET_RIGHT;
 
-  extern const std::vector<std::pair<const char*, 
-    const char*>> WALL_TYPES;
+  extern const std::vector<std::pair<const char*, const char*>> WALL_TYPES;
   
   struct ColorRgb
   {
@@ -41,8 +40,8 @@ namespace clg_cursescpp
       explicit StyleWindow(IWindow* window);
       ~StyleWindow();
 
-      void drawWall(size_t lenght, bool isHorizontalOrVertical,
-        const std::pair<short, short>& whereWillStartingWall) const; //* OK
+      void drawWall(size_t lenght, bool is_horizontal_or_vertical,
+        const std::pair<short, short>& where_will_starting_wall) const; //* OK
       
       static void decorateColor(const Color& color, char ch);
       void headerWindow(const char* text) const; //* OK
@@ -53,15 +52,15 @@ namespace clg_cursescpp
     protected:
       [[nodiscard]] bool getIsHasColor() const;
 
-      static void generateWall(bool isHorizontalOrVertical,
-        std::vector<const char*>& vecSimbols, size_t size = 0); //* OK
+      static void generateWall(bool is_horizontal_or_vertical,
+        std::vector<const char*>& vec_simbols, size_t size = 0); //* OK
       
       static void startColor(); //* OK
       static void initPairColor(short pair_number, short foreground,
         short background);
-      static unsigned long colorPair(int pairNumber);
+      static unsigned long colorPair(int pair_number);
       void initColor(short color_number, const ColorRgb& rgb);
-      void attr(bool on_off, unsigned attribute);
+      void attr(bool is_on_off, unsigned attribute);
       void setAttr(unsigned attribute);
 
     private:

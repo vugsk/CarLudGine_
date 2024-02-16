@@ -24,25 +24,26 @@ namespace clg_cursescpp {
   
   class ControlKeyboard
   {
-    public:
-      ControlKeyboard(const IWindow& window, bool is_echo_no_off, bool is_curs);
-      ControlKeyboard(WINDOW* window, bool is_echo_no_off, bool is_curs);
-      ~ControlKeyboard();
+  protected:
+    static void scan(const char *str, va_list args,
+      WINDOW* window, const std::pair<unsigned, unsigned>& xy = NULL_XY);
 
-      void scanWin(const char* format, ...) const;
-      void moveScanWin(const std::pair<int, int>& xy, const char* format, ...) const;
-      void eventKeyboard(const std::function<void()>& event,
-        char button_sibols) const;
-      
-      [[nodiscard]] int getCh() const;
-      static void echo(bool is_no_off);
-      static void curs(int num);
+  private:
+    WINDOW* _win;
 
-    protected:
-      static void scan(const char *str, va_list args,
-        WINDOW* window, const std::pair<int, int>& xy = NULL_XY);
+  public:
+    ControlKeyboard(const IWindow& window, bool is_echo_no_off, bool is_curs);
+    ControlKeyboard(WINDOW* window, bool is_echo_no_off, bool is_curs);
+    ~ControlKeyboard();
 
-    private:
-      WINDOW* _win;
+    void scanWin(const char* format, ...) const;
+    void moveScanWin(const std::pair<unsigned, unsigned>& xy,
+      const char* format, ...) const;
+    void eventKeyboard(const std::function<void()>& event, char button_sibols) const;
+
+    [[nodiscard]] int getCh() const;
+    static void echo(bool is_no_off);
+    static void curs(int num);
+
   };
 }

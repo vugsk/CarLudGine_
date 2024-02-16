@@ -80,8 +80,8 @@ void clg_cursescpp::StyleWindow::drawWall(const size_t lenght,
 
 void clg_cursescpp::StyleWindow::headerWindow(const char* text) const
 {
-    int x = (ConvertTypeData<int>(_mWin->getXY().first) / 2) -
-        (ConvertTypeData<int>(wcslen(converterCharInWchar(text))));
+    int x = (static_cast<int>(_mWin->getXY().first) / 2) -
+        (static_cast<int>(wcslen(converterCharInWchar(text))));
     _mWin->movePrintWin({x, 0}, "%c %s %c",
         SQUARE_BRACKET_LEFT, text, SQUARE_BRACKET_RIGHT);
 }

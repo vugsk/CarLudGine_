@@ -5,7 +5,6 @@
 
 namespace clg_cursescpp
 {
-
   class IWindow;
 
   extern const char SQUARE_BRACKET_LEFT;
@@ -36,37 +35,38 @@ namespace clg_cursescpp
 
   class StyleWindow
   {
-    public:
-      explicit StyleWindow(IWindow* window);
-      ~StyleWindow();
+  public:
+    explicit StyleWindow(IWindow* window);
+    ~StyleWindow();
 
-      void drawWall(size_t lenght, bool is_horizontal_or_vertical,
-        const std::pair<short, short>& where_will_starting_wall) const; //* OK
-      
-      static void decorateColor(const Color& color, char ch);
-      void headerWindow(const char* text) const; //* OK
-      void clear() const; //* OK
-      void clear(const std::pair<short, short>& begin_xy, 
-        const std::pair<short, short>& end_xy) const; //* OK
+    void drawWall(size_t lenght, bool is_horizontal_or_vertical,
+      const std::pair<short, short>& where_will_starting_wall) const; //* OK
 
-    protected:
-      [[nodiscard]] bool getIsHasColor() const;
+    static void decorateColor(const Color& color, char ch);
+    void headerWindow(const char* text) const; //* OK
+    void clear() const; //* OK
+    void clear(const std::pair<short, short>& begin_xy,
+      const std::pair<short, short>& end_xy) const; //* OK
 
-      static void generateWall(bool is_horizontal_or_vertical,
-        std::vector<const char*>& vec_simbols, size_t size = 0); //* OK
-      
-      static void startColor(); //* OK
-      static void initPairColor(short pair_number, short foreground,
-        short background);
-      static unsigned long colorPair(int pair_number);
-      void initColor(short color_number, const ColorRgb& rgb);
-      void attr(bool is_on_off, unsigned attribute);
-      void setAttr(unsigned attribute);
+  protected:
+    [[nodiscard]] bool getIsHasColor() const;
 
-    private:
-      bool      _isHasColor{};
-      IWindow*  _mWin;
+    static void generateWall(bool is_horizontal_or_vertical,
+      std::vector<const char*>& vec_simbols, size_t size = 0); //* OK
+
+    static void startColor(); //* OK
+    static void initPairColor(short pair_number, short foreground, short background);
+    static unsigned long colorPair(int pair_number);
+    void initColor(short color_number, const ColorRgb& rgb);
+    void attr(bool is_on_off, unsigned attribute);
+    void setAttr(unsigned attribute);
+
+  private:
+    bool      _isHasColor;
+    IWindow*  _mWin;
+
   };
+
 }
 
 

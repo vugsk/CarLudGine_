@@ -9,8 +9,8 @@ void clg_cursescpp::initScreen(const bool keypad)
     ::clg_cursescpp::initscr();
     ::clg_cursescpp::keypad(stdscr, keypad);
 
-    MAX_SCREEN_XY = std::make_pair(ConvertTypeData<short>(getmaxx(stdscr)), 
-                                   ConvertTypeData<short>(getmaxy(stdscr)));
+    MAX_SCREEN_XY = std::make_pair(static_cast<short>(getmaxx(stdscr)),
+                                   static_cast<short>(getmaxy(stdscr)));
 }
 
 
@@ -19,19 +19,21 @@ clg_cursescpp::WINDOW* clg_cursescpp::Window::getWindow() const {
 }
 
 void clg_cursescpp::Window::print(const char *text, va_list args,
-    const std::pair<int, int>& xy) const
+    const std::pair<unsigned, unsigned> &xy) const
 {
-    ::clg_cursescpp::wmove(_win, xy.second, xy.first);
+    ::clg_cursescpp::wmove(_win, static_cast<int>(xy.second), static_cast<int>(xy.first));
     ::clg_cursescpp::vw_printw(_win, text, args);
     ::clg_cursescpp::wrefresh(_win);
 }
 
 clg_cursescpp::WINDOW* clg_cursescpp::Window::createWindow(
-    const std::pair<int, int>& xy,
-    const std::pair<int, int>& size)
+    const std::pair<unsigned, unsigned> &xy,
+    const std::pair<unsigned, unsigned> &size)
 {
-    return ::clg_cursescpp::newwin(xy.second, xy.first,
-        size.second, size.first);
+    return ::clg_cursescpp::newwin(static_cast<int>(xy.second),
+                                   static_cast<int>(xy.first),
+                                   static_cast<int>(size.second),
+                                   static_cast<int>(size.first));
 }
 
 
@@ -45,8 +47,8 @@ const std::pair<short, short>& clg_cursescpp::Window::getXY() const
     return _xy;
 }
 
-void clg_cursescpp::Window::movePrintWin(const std::pair<int, int>& xy, 
-    const char* text, ...)
+void clg_cursescpp::Window::movePrintWin( const std::pair<unsigned, unsigned> &xy,
+    const char *text, ...)
 {
     va_list args;
     va_start(args, text);
@@ -63,8 +65,8 @@ void clg_cursescpp::Window::printWin(const char* text, ...)
 }
 
 
-clg_cursescpp::Window::Window(const std::pair<int, int>& xy, 
-        const std::pair<int, int>& size)
+clg_cursescpp::Window::Window(const std::pair<unsigned, unsigned>& xy,
+        const std::pair<unsigned, unsigned>& size)
     : _win(createWindow(xy, size))
     , _xy(ConvertStructPairNum<short>(xy))
 {

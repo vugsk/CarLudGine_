@@ -44,15 +44,13 @@
 #endif
 
 
-template<typename T1, typename T2>
-T1 ConvertTypeData(T2 data) { return static_cast<T1>(data); }
 
 template<typename T1, typename T2>
 std::pair<T1, T1> ConvertStructPairNum(const std::pair<T2, T2>& data)
 {
   return std::make_pair(
-    ConvertTypeData<T1>(data.first),
-    ConvertTypeData<T1>(data.second)
+    static_cast<T1>(data.first),
+    static_cast<T1>(data.second)
   );
 }
 
@@ -79,8 +77,8 @@ namespace clg_cursescpp
 {
   #include <curses.h>
 
-  extern const std::pair<int, int> NULL_XY;
-  extern const std::pair<short, short> NULL_XY_int16;
+  extern const std::pair<unsigned, unsigned> NULL_XY;
+  extern const std::pair<short, short> NULL_XY_INT16;
   extern std::pair<int, int> MAX_SCREEN_XY;
 
   const wchar_t* converterCharInWchar(const char* ch);

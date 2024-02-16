@@ -3,10 +3,10 @@
 #include "IWindow.hpp"
 
 
-const char clg_cursescpp::DOWN  = ConvertTypeData<char>(KEY_DOWN);  // стрелка вниз
-const char clg_cursescpp::UP    = ConvertTypeData<char>(KEY_UP);    // стрелка вверх
-const char clg_cursescpp::LEFT  = ConvertTypeData<char>(KEY_LEFT);  // стрелка влево
-const char clg_cursescpp::RIGHT = ConvertTypeData<char>(KEY_RIGHT); // стрелка вправо 
+const char clg_cursescpp::DOWN  = static_cast<char>(KEY_DOWN);  // стрелка вниз
+const char clg_cursescpp::UP    = static_cast<char>(KEY_UP);    // стрелка вверх
+const char clg_cursescpp::LEFT  = static_cast<char>(KEY_LEFT);  // стрелка влево
+const char clg_cursescpp::RIGHT = static_cast<char>(KEY_RIGHT); // стрелка вправо
 
 const char clg_cursescpp::KEY_W = 119;
 const char clg_cursescpp::KEY_A = 97;
@@ -27,7 +27,7 @@ void clg_cursescpp::ControlKeyboard::scanWin(const char *format, ...) const
     va_end(args);
 }
 
-void clg_cursescpp::ControlKeyboard::moveScanWin(const std::pair<int, int>& xy, 
+void clg_cursescpp::ControlKeyboard::moveScanWin(const std::pair<unsigned, unsigned>& xy,
     const char *format, ...) const
 {
     va_list args;
@@ -101,8 +101,8 @@ clg_cursescpp::ControlKeyboard::~ControlKeyboard()
 */
 
 void clg_cursescpp::ControlKeyboard::scan(const char *str,
-    va_list args, WINDOW *window, const std::pair<int, int>& xy)
+    va_list args, WINDOW *window, const std::pair<unsigned, unsigned>& xy)
 {
-    wmove(window, xy.second, xy.first);
+    wmove(window, static_cast<int>(xy.second), static_cast<int>(xy.first));
     vw_scanw(window, str, args);
 }

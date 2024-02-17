@@ -34,8 +34,7 @@ namespace clg_parserfilescpp
 			T dataVector(read<int>(name, rt));
 			for (auto i = 0; i < dataVector.size(); i++)
 			{
-				dataVector[i] = read<T2>(name,
-					ty + std::to_string(i));
+				dataVector[i] = read<T2>(name, ty + std::to_string(i));
 			}
 
 			delete[] ty;

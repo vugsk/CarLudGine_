@@ -86,8 +86,7 @@ namespace clg_cursescpp
 
 namespace clg_parserfilescpp
 {
-  static inline const std::unordered_map<std::type_index,
-    const std::string> typeName
+  static inline std::unordered_map<std::type_index, const std::string> typeName
   {
   	{std::type_index(typeid(int)), "int"},
   	{std::type_index(typeid(double)), "double"},

@@ -62,7 +62,7 @@ namespace clg_cursescpp
     void setAttr(unsigned attribute);
 
   private:
-    bool      _isHasColor;
+    bool      _isHasColor{};
     IWindow*  _mWin;
 
   };

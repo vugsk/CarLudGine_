@@ -32,8 +32,8 @@ namespace clg_cursescpp {
     WINDOW* _win;
 
   public:
-    ControlKeyboard(const IWindow& window, bool is_echo_no_off, bool is_curs);
-    ControlKeyboard(WINDOW* window, bool is_echo_no_off, bool is_curs);
+    ControlKeyboard(const IWindow& window, bool is_echo_no_off, unsigned is_curs);
+    ControlKeyboard(WINDOW* window, bool is_echo_no_off, unsigned is_curs);
     ~ControlKeyboard();
 
     void scanWin(const char* format, ...) const;
@@ -43,7 +43,7 @@ namespace clg_cursescpp {
 
     [[nodiscard]] int getCh() const;
     static void echo(bool is_no_off);
-    static void curs(int num);
+    static void curs(unsigned num);
 
   };
 }

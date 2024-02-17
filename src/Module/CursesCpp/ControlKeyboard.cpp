@@ -57,14 +57,14 @@ void clg_cursescpp::ControlKeyboard::echo(const bool is_no_off)
     ::clg_cursescpp::echo();
 }
 
-void clg_cursescpp::ControlKeyboard::curs(const int num)
+void clg_cursescpp::ControlKeyboard::curs(const unsigned num)
 {
-    ::clg_cursescpp::curs_set(num);
+    ::clg_cursescpp::curs_set(static_cast<int>(num));
 }
 
 clg_cursescpp::ControlKeyboard::ControlKeyboard(
-    const clg_cursescpp::IWindow& window, const bool is_echo_no_off,
-    const bool is_curs)
+    const IWindow& window, const bool is_echo_no_off,
+    const unsigned is_curs)
 {
     #if DEBUG_CURSES_CPP
         PRINT_CONSTRUCTED_DEBUG(CONTROL_KEYBOARD_CL);
@@ -76,7 +76,7 @@ clg_cursescpp::ControlKeyboard::ControlKeyboard(
 }
 
 clg_cursescpp::ControlKeyboard::ControlKeyboard(WINDOW* window,
-    const bool is_echo_no_off, const bool is_curs)
+    const bool is_echo_no_off, const unsigned is_curs)
         : _win(window ? window : nullptr)
 {
     #if DEBUG_CURSES_CPP

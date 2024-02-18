@@ -38,9 +38,13 @@ namespace clg_cursescpp
   public:
     explicit StyleWindow(IWindow* window);
     ~StyleWindow();
+    StyleWindow( const StyleWindow &other )                 = delete;
+    StyleWindow( StyleWindow &&other ) noexcept             = delete;
+    StyleWindow & operator=( const StyleWindow &other )     = delete;
+    StyleWindow & operator=( StyleWindow &&other ) noexcept = delete;
 
     void drawWall(size_t lenght, bool is_horizontal_or_vertical,
-      const std::pair<short, short>& where_will_starting_wall) const; //* OK
+                  const std::pair<short, short>& where_will_starting_wall) const; //* OK
 
     static void decorateColor(const Color& color, char ch);
     void headerWindow(const char* text) const; //* OK

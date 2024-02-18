@@ -1,6 +1,6 @@
 
-#include "StyleWindow.hpp"
-#include "IWindow.hpp"
+#include "CarLudGine/StyleWindow.hpp"
+#include "CarLudGine/IWindow.hpp"
 
 const char clg_cursescpp::SQUARE_BRACKET_LEFT = '[';
 const char clg_cursescpp::SQUARE_BRACKET_RIGHT = ']';

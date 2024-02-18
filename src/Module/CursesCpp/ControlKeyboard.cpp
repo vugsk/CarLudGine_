@@ -1,6 +1,6 @@
 
-#include "ControlKeyboard.hpp"
-#include "IWindow.hpp"
+#include "CarLudGine/ControlKeyboard.hpp"
+#include "CarLudGine/IWindow.hpp"
 
 
 const char clg_cursescpp::DOWN  = static_cast<char>(KEY_DOWN);  // стрелка вниз

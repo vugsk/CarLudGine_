@@ -35,6 +35,10 @@ namespace clg_cursescpp {
     ControlKeyboard(const IWindow& window, bool is_echo_no_off, unsigned is_curs);
     ControlKeyboard(WINDOW* window, bool is_echo_no_off, unsigned is_curs);
     ~ControlKeyboard();
+    ControlKeyboard( const ControlKeyboard &other )                 = delete;
+    ControlKeyboard( ControlKeyboard &&other ) noexcept             = delete;
+    ControlKeyboard & operator=( const ControlKeyboard &other )     = delete;
+    ControlKeyboard & operator=( ControlKeyboard &&other ) noexcept = delete;
 
     void scanWin(const char* format, ...) const;
     void moveScanWin(const std::pair<unsigned, unsigned>& xy,

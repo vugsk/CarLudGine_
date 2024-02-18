@@ -1,5 +1,5 @@
 
-#include "Config.hpp"
+#include "CarLudGine/Config.hpp"
 
 #include <cstddef>
 #include <cstdlib>

@@ -1,11 +1,11 @@
 
-#include "ParserJsonFiles.hpp"
+#include "CarLudGine/ParserJsonFiles.hpp"
+#include "CarLudGine/Config.hpp"
 
 #include <fstream>
 #include <bits/fs_ops.h>
 #include <bits/fs_path.h>
 
-#include <Config.hpp>
 
 clg_parserfilescpp::ParserJsonFiles::ParserJsonFiles()
 {

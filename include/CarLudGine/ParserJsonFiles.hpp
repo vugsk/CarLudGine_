@@ -31,6 +31,7 @@ namespace clg_parserfilescpp
 		nlohmann::json			   _dataWriteInFile;
 		std::stack<const char*>    st_key;
 		std::stack<nlohmann::json> st_data;
+		bool test_bool;
 
 	protected:
 		[[nodiscard]] nlohmann::json getDataWriteInFile() const;
@@ -47,8 +48,22 @@ namespace clg_parserfilescpp
 			{ data[key] = value; }
 
 
+		template <typename T>
+		bool getValue2( const char *key, T &value,
+			const nlohmann::detail::iteration_proxy_value<
+				nlohmann::detail::iter_impl<const nlohmann::basic_json<>>> &i )
+		{
+			if (i.value().is_object())
+			{
+				st_key.push(i.key().c_str());
+				value = readFromFile<T>(key, i.value(), false);
+				return false;
+			}
+			return true;
+		}
 
-		template <typename T >
+
+		template <typename T>
 		bool getValue1( const char *key, const nlohmann::json &data, T &value )
 		{
 			for (auto&i : data.items())
@@ -57,18 +72,13 @@ namespace clg_parserfilescpp
 					break;
 				if (i.key() != key && !st_data.top().empty() && !i.value().is_object())
 					st_data.top().erase(i.key());
-				if (i.value().is_object())
-				{
-					st_key.push(i.key().c_str());
-					value = readFromFile<T>(key, i.value(), false);
-					return false;
-				}
+				if (const bool valueb = getValue2<T>(key, value, i); !valueb)
+					return valueb;
 			}
 			return true;
 		}
 
-
-		template <typename T > bool getValue( const char *key, T &value )
+		template <typename T > bool getValue(const char *key, T &value)
 		{
 			if (st_data.top().is_object() && st_data.top().empty())
 			{
@@ -81,15 +91,13 @@ namespace clg_parserfilescpp
 			return false;
 		}
 
-
 		template<typename T>
-		T readFromFile(const char*			  key,
-						  const nlohmann::json& data,
-						  const bool			  test)
+		T readFromFile(const char* key, const nlohmann::json& data, const bool test)
 		{
 			if (!test)
 				st_data.push(data);
-			if (T value; !getValue1<T>(key, data, value) || getValue<T>(key, value))
+			if (T value; !getValue1<T>(key, data, value)
+					|| getValue<T>(key, value))
 				return value;
 			return data[key];
 		}

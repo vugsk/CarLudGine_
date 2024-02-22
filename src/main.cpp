@@ -127,6 +127,7 @@ int main()
     std::cout << pjf.read<int>(fileJson.c_str(), "l") << '\n';
     std::cout << pjf.read<int>(fileJson.c_str(), "did") << '\n';
     std::cout << pjf.read<int>(fileJson.c_str(), "gh") << '\n';
+    std::cout << pjf.read<std::string>(fileJson.c_str(), "kd") << '\n';
 
     // clg_parserfilescpp::ParserIni pi;
     // pi.read<std::vector<int>>(file, key);

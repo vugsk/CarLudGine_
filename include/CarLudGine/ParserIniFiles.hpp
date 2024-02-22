@@ -5,7 +5,7 @@
 #include <boost/property_tree/ptree.hpp>
 
 #include "Config.hpp"
-#include "Errors/CError.hpp"
+// #include "Errors/CError.hpp"
 
 
 namespace clg_parserfilescpp

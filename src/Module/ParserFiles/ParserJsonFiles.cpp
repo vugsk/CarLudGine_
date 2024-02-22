@@ -59,6 +59,9 @@ void clg_parserfilescpp::ParserJsonFiles::writeInFile(const char* name) const
 void clg_parserfilescpp::ParserJsonFiles::add(const nlohmann::json &whereFromData,
 	nlohmann::json &whereData)
 {
-	for (auto [keys, values] : whereFromData.items())
-		{ add(whereData, keys.c_str(), values); }
+	for (auto [keys, values]
+		: whereFromData.items())
+	{
+		add(whereData, keys.c_str(), values);
+	}
 }

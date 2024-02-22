@@ -1,10 +1,8 @@
 
 #pragma once
 
-#include <iostream>
 #include <stack>
 #include <nlohmann/json.hpp>
-#include <yaml-cpp/node/detail/iterator_fwd.h>
 
 
 namespace clg_parserfilescpp
@@ -19,11 +17,15 @@ namespace clg_parserfilescpp
 
 		template<typename T>
 		T read(const char* name, const char* key)
-  			{ return readFromFile<T>(key, readInFile(name), false); }
+		{
+			return readFromFile<T>(key, readInFile(name), false);
+		}
 
 		template<typename T>
 		void write(const char* key, T&& data)
-  			{ add(_dataWriteInFile, key, data); }
+		{
+			add(_dataWriteInFile, key, data);
+		}
 
 		void close(const char* name);
 
@@ -31,7 +33,6 @@ namespace clg_parserfilescpp
 		nlohmann::json			   _dataWriteInFile;
 		std::stack<const char*>    st_key;
 		std::stack<nlohmann::json> st_data;
-		bool test_bool;
 
 	protected:
 		[[nodiscard]] nlohmann::json getDataWriteInFile() const;
@@ -45,9 +46,12 @@ namespace clg_parserfilescpp
 
 		template<typename T>
 		static void add(nlohmann::json& data, const char* key, T&& value)
-			{ data[key] = value; }
+		{
+			data[key] = value;
+		}
 
 
+		//! rename
 		template <typename T>
 		bool getValue2( const char *key, T &value,
 			const nlohmann::detail::iteration_proxy_value<
@@ -63,6 +67,7 @@ namespace clg_parserfilescpp
 		}
 
 
+		//! rename
 		template <typename T>
 		bool getValue1( const char *key, const nlohmann::json &data, T &value )
 		{
@@ -78,7 +83,10 @@ namespace clg_parserfilescpp
 			return true;
 		}
 
-		template <typename T > bool getValue(const char *key, T &value)
+
+		//! rename
+		template <typename T>
+		bool getValue(const char *key, T &value)
 		{
 			if (st_data.top().is_object() && st_data.top().empty())
 			{
@@ -91,6 +99,8 @@ namespace clg_parserfilescpp
 			return false;
 		}
 
+
+		//! rename
 		template<typename T>
 		T readFromFile(const char* key, const nlohmann::json& data, const bool test)
 		{

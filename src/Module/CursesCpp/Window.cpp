@@ -21,7 +21,8 @@ clg_cursescpp::WINDOW* clg_cursescpp::Window::getWindow() const {
 void clg_cursescpp::Window::print(const char *text, va_list args,
     const std::pair<unsigned, unsigned> &xy) const
 {
-    ::clg_cursescpp::wmove(_win, static_cast<int>(xy.second), static_cast<int>(xy.first));
+    ::clg_cursescpp::wmove(_win, static_cast<int>(xy.second),
+        static_cast<int>(xy.first));
     ::clg_cursescpp::vw_printw(_win, text, args);
     ::clg_cursescpp::wrefresh(_win);
 }

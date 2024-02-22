@@ -19,7 +19,7 @@ namespace clg_parserfilescpp
 
 		template<typename T>
 		T read(const char* name, const char* key)
-  			{ return readFromFile<T>(key, readInFile(name)); }
+  			{ return readFromFile<T>(key, readInFile(name), false); }
 
 		template<typename T>
 		void write(const char* key, T&& data)
@@ -47,46 +47,50 @@ namespace clg_parserfilescpp
 			{ data[key] = value; }
 
 
-		template <typename T>
-		T getValue( const char *key, const nlohmann::json &data ) {
+
+		template <typename T >
+		bool getValue1( const char *key, const nlohmann::json &data, T &value )
+		{
+			for (auto&i : data.items())
+			{
+				if (i.key() == key)
+					break;
+				if (i.key() != key && !st_data.top().empty() && !i.value().is_object())
+					st_data.top().erase(i.key());
+				if (i.value().is_object())
+				{
+					st_key.push(i.key().c_str());
+					value = readFromFile<T>(key, i.value(), false);
+					return false;
+				}
+			}
+			return true;
+		}
+
+
+		template <typename T > bool getValue( const char *key, T &value )
+		{
 			if (st_data.top().is_object() && st_data.top().empty())
 			{
 				st_data.pop();
 				st_data.top().erase(st_key.top());
 				st_key.pop();
-				return readFromFile<T>(key, st_data.top());
+				value = readFromFile<T>(key, st_data.top(), true);
+				return true;
 			}
-			return data[key];
+			return false;
 		}
 
 
 		template<typename T>
 		T readFromFile(const char*			  key,
 						  const nlohmann::json& data,
-						  const bool			  test = false)
+						  const bool			  test)
 		{
-			if (!test) { st_data.push(data); }
-
-			for (auto& i : data.items())
-			{
-				if (i.key() == key) break;
-				if (i.key() != key && !st_data.top().empty()
-								&& !i.value().is_object())
-					st_data.top().erase(i.key());
-				if (i.value().is_object())
-				{
-					st_key.push(i.key().c_str());
-					return readFromFile<T>(key, i.value());
-				}
-			}
-
-			if (st_data.top().is_object() && st_data.top().empty())
-			{
-				st_data.pop();
-				st_data.top().erase(st_key.top());
-				st_key.pop();
-				return readFromFile<T>(key, st_data.top(), true);
-			}
+			if (!test)
+				st_data.push(data);
+			if (T value; !getValue1<T>(key, data, value) || getValue<T>(key, value))
+				return value;
 			return data[key];
 		}
 	};

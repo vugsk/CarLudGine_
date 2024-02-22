@@ -75,7 +75,8 @@ namespace clg_parserfilescpp
 			{
 				if (i.key() == key)
 					break;
-				if (i.key() != key && !st_data.top().empty() && !i.value().is_object())
+				if (i.key() != key && !st_data.top().empty()
+								   && !i.value().is_object())
 					st_data.top().erase(i.key());
 				if (const bool valueb = getValue2<T>(key, value, i); !valueb)
 					return valueb;

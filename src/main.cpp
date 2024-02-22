@@ -1,9 +1,9 @@
 
 
 #include <iostream>
-#include <variant>
 #include <vector>
 #include <bits/fs_fwd.h>
+
 #include <CarLudGine/ParserIniFiles.hpp>
 #include <CarLudGine/ParserJsonFiles.hpp>
 
@@ -15,6 +15,14 @@ public:
     virtual    ~IParser() = default;
     virtual T1 test_read(const char*key, const T2&data) = 0;
 };
+
+static nlohmann::json readInFile(const char* name)
+{
+    std::ifstream file(name);
+    nlohmann::json data = nlohmann::json::parse(file);
+    file.close();
+    return data;
+}
 
 template<typename T>
 class ParserJson final : public IParser<T, nlohmann::json>
@@ -30,14 +38,6 @@ public:
                 || getValue(key, value))
             return value;
         return data[key];
-    }
-
-    static nlohmann::json readInFile(const char* name)
-    {
-        std::ifstream file(name);
-        nlohmann::json data = nlohmann::json::parse(file);
-        file.close();
-        return data;
     }
 
 protected:
@@ -92,7 +92,7 @@ private:
     bool test = false;
 };
 
-
+// #define testIO(index) {#int, #char}
 
 class Parser
 {
@@ -102,6 +102,7 @@ public:
     Parser( Parser &&other ) noexcept = delete;
     ~Parser()                         = default;
 
+    #define jk nlohmann::json
 
     template<typename T>
     T read(const std::string& name, const std::string& key)
@@ -114,9 +115,12 @@ public:
         {
             // class ParserJsonFiles method read
             // return readFromFile<T>(key, readInFile(name));
-            ParserJson<T> pj;
-            return pj.test_read(key.c_str(),
-                ParserJson<T>::readInFile(name.c_str()));
+            // ParserJson<T> pj;
+            // return pj.test_read(key.c_str(),
+            //     ParserJson<T>::readInFile(name.c_str()));
+            return test_create_fabric<T, jk>(
+                _formatFiles[0])->test_read(key.c_str(),
+                readInFile(name.c_str()));
         }
         else if (findFormatFile(name) == _formatFiles[1])
         {
@@ -194,7 +198,7 @@ protected:
     }
 
     template<typename T1, typename T2>
-    static const IParser<T1, T2>& test_create_fabric(const std::string& formatFile)
+    static IParser<T1, T2>* test_create_fabric(const std::string& formatFile)
     {
         if (formatFile == _formatFiles[0])
             return new ParserJson<T1>();

@@ -1,8 +1,10 @@
 
 #pragma once
 
+#include <iostream>
 #include <stack>
 #include <nlohmann/json.hpp>
+#include <yaml-cpp/node/detail/iterator_fwd.h>
 
 
 namespace clg_parserfilescpp
@@ -44,40 +46,48 @@ namespace clg_parserfilescpp
 		static void add(nlohmann::json& data, const char* key, T&& value)
 			{ data[key] = value; }
 
+
+		template <typename T>
+		T getValue( const char *key, const nlohmann::json &data ) {
+			if (st_data.top().is_object() && st_data.top().empty())
+			{
+				st_data.pop();
+				st_data.top().erase(st_key.top());
+				st_key.pop();
+				return readFromFile<T>(key, st_data.top());
+			}
+			return data[key];
+		}
+
+
 		template<typename T>
-		T readFromFile(const char* key, const nlohmann::json& data)
+		T readFromFile(const char*			  key,
+						  const nlohmann::json& data,
+						  const bool			  test = false)
 		{
-			static auto te = false;
+			if (!test) { st_data.push(data); }
 
-			if (!te)
-  			{
-  				st_data.push(data);
-  				te = true;
-  			}
-  			for (auto& [keys, values] : data.items())
-  			{
-  			    if (keys == key) { break; }
-  			    if (keys != key && !st_data.top().empty() && !values.is_object())
-  			    {
-  			        st_data.top().erase(keys);
-  			    	continue;
-  			    }
-  			    if (values.is_object())
-  			    {
-  			        st_key.push(keys.c_str());
-  			        return readFromFile<T>(key, values);
-  			    }
-  			}
-  			if (st_data.top().is_object() && st_data.top().empty())
-  			{
-  			    st_data.pop();
-  			    st_data.top().erase(st_key.top());
-  			    st_key.pop();
-  			    return readFromFile<T>(key, st_data.top());
-  			}
+			for (auto& i : data.items())
+			{
+				if (i.key() == key) break;
+				if (i.key() != key && !st_data.top().empty()
+								&& !i.value().is_object())
+					st_data.top().erase(i.key());
+				if (i.value().is_object())
+				{
+					st_key.push(i.key().c_str());
+					return readFromFile<T>(key, i.value());
+				}
+			}
 
-			te = false;
-  			return data[key];
+			if (st_data.top().is_object() && st_data.top().empty())
+			{
+				st_data.pop();
+				st_data.top().erase(st_key.top());
+				st_key.pop();
+				return readFromFile<T>(key, st_data.top(), true);
+			}
+			return data[key];
 		}
 	};
 }

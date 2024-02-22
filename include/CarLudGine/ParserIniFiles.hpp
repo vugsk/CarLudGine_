@@ -5,9 +5,12 @@
 #include <boost/property_tree/ptree.hpp>
 
 #include "Config.hpp"
+#include "Errors/CError.hpp"
+
 
 namespace clg_parserfilescpp
 {
+
 	class ParserIniFiles
 	{
 	public:
@@ -44,9 +47,11 @@ namespace clg_parserfilescpp
 
 	private:
 		boost::property_tree::ptree pt;
-
 	};
 
-}
+};
+
+
+
 
 

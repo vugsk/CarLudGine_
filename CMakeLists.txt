@@ -81,8 +81,8 @@ add_executable( CarLudGine
                 include/CarLudGine/ParserYamlFiles.hpp
                 src/Module/ParserFiles/ParserIniFiles.cpp
                 include/CarLudGine/ParserIniFiles.hpp
-                src/Module/SoundControll/SoundControl.cpp
-                include/CarLudGine/SoundControl.hpp
+                src/Errors/CError.cpp
+                include/CarLudGine/Errors/CError.hpp
 )
 
 # target_include_directories(CarLudGine PRIVATE ${CMAKE_CURRENT_BINARY_DIR})

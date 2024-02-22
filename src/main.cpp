@@ -8,8 +8,7 @@
 #include <CarLudGine/ParserJsonFiles.hpp>
 
 
-template<typename T1, typename T2>
-class IParser //! rename
+template<typename T1, typename T2> class IParser
 {
 public:
     virtual ~IParser()                               = default;
@@ -33,15 +32,8 @@ static json RetrievesDataFromFile_json(const char* name)
     return data;
 }
 
-template<typename T>
-class ParserJson final : public IParser<T, json> //! rename
+template<typename T> class ParserJson final : public IParser<T, json>
 {
-private:
-    json m_dataWriteInFile;
-    std::stack<const char*> m_stackKey;
-    std::stack<json> m_stackData;
-    bool m_isMethodBeenRunLeastOnce;
-
 public:
     ParserJson() : m_isMethodBeenRunLeastOnce(false) {}
     ParserJson( const ParserJson &other )                 = delete;
@@ -76,8 +68,8 @@ protected:
         return true;
     }
 
-    [[nodiscard]] bool isSuchKeyExist(const char *key,
-        const json &data, T &return_value)
+    [[nodiscard]] constexpr bool isSuchKeyExist(const char *key,
+                                                const json &data, T &return_value)
     {
         for (auto&i : data.items())
         {
@@ -93,8 +85,8 @@ protected:
         return true;
     }
 
-    [[nodiscard]] bool isThereObjectTheStackAndIsEmpty(const char *key,
-        T &return_value)
+    [[nodiscard]] constexpr bool isThereObjectTheStackAndIsEmpty(const char *key,
+                                                                 T &return_value)
     {
         if (m_stackData.top().is_object() && m_stackData.top().empty())
         {
@@ -108,9 +100,15 @@ protected:
         return false;
     }
 
+private:
+    json m_dataWriteInFile;
+    std::stack<const char*> m_stackKey;
+    std::stack<json> m_stackData;
+    bool m_isMethodBeenRunLeastOnce;
+
 };
 
-class Parser //! rename
+class Parser
 {
 public:
     Parser() = default;
@@ -125,13 +123,13 @@ public:
         existFile(name);
         emptyFile(name);
 
-        if (findFormatFile(name) == _formatFiles[0])
+        if (findFormatFile(name) == m_formatFiles[0])
         {
-            ParserJson<T> pj;
-            return pj.readValueByKey_DataFile(key.c_str(),
+            ParserJson<T> parser_json;
+            return parser_json.readValueByKey_DataFile(key.c_str(),
                 RetrievesDataFromFile_json(name.c_str()));
         }
-        else if (findFormatFile(name) == _formatFiles[1])
+        else if (findFormatFile(name) == m_formatFiles[1])
         {
             // class ParserIniFiles method read
             // ...
@@ -152,9 +150,9 @@ public:
 protected:
     static void formatFile(const std::string& name)
     {
-        for (auto count = 0; const auto& i : _formatFiles)
+        for (auto count = 0; const auto& i : m_formatFiles)
         {
-            if (!name.ends_with(i) && count++ == _formatFiles.size() - 1)
+            if (!name.ends_with(i) && count++ == m_formatFiles.size() - 1)
             {
                 printf("Error: not format file!!!");
                 exit(EXIT_FAILURE);
@@ -187,31 +185,31 @@ protected:
 
     static void addListFormatFiles(const std::string& format)
     {
-        _formatFiles.push_back(format);
+        m_formatFiles.push_back(format);
     }
 
     static void removeListFormatFiles(const std::string& format)
     {
-        if (format == _formatFiles[0] || format == _formatFiles[1])
+        if (format == m_formatFiles[0] || format == m_formatFiles[1])
         {
             printf("Error: not delete %s", format.c_str());
             exit(EXIT_FAILURE);
         }
-        _formatFiles.erase(std::ranges::find(
-            _formatFiles.begin(), _formatFiles.end(), format));
+        m_formatFiles.erase(std::ranges::find(
+            m_formatFiles.begin(), m_formatFiles.end(), format));
     }
 
     static const std::string& getListFormatFiles(const size_t index)
     {
-        return _formatFiles[index];
+        return m_formatFiles[index];
     }
 
 private:
-    static std::vector<std::string> _formatFiles;
+    static std::vector<std::string> m_formatFiles;
 
 };
 
-std::vector<std::string> Parser::_formatFiles {"json", "ini"};
+std::vector<std::string> Parser::m_formatFiles {"json", "ini"};
 
 
 
@@ -221,8 +219,6 @@ int main()
     const std::string file = "text.ini";
     const std::string fileJson = "Setting_game.json";
     const std::string key  = "TestInterfaceMenu.title";
-
-    ParserJson<int> op;
 
     Parser p;
     std::cout << p.read<int>(fileJson, "hj") << '\n';

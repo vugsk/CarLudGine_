@@ -33,13 +33,67 @@ static json RetrievesDataFromFile(const char* name)
     return data;
 }
 
-// class IParserFile
-// {
-// public:
-//
-// };
+template<typename T>
+class IParserFile
+{
+public:
+    virtual   ~IParserFile() = default;
+    virtual T read_test(const char* key, const char* name) = 0;
 
+};
 
+template<typename T>
+class ParserJsonFile final : public IParserFile<T>
+{
+public:
+    ParserJsonFile()
+        : m_isMethodBeenRunLeastOnce(false) {}
+
+    T read_test(const char* key, const char* name) override
+    {
+        return readValueByKeyFromFile(key, RetrievesDataFromFile(name));
+    }
+
+protected:
+    [[nodiscard]] T readValueByKeyFromFile(const char* key, const json& data)
+    {
+        if (!m_isMethodBeenRunLeastOnce)
+            m_stackData.push(data);
+
+        for (auto& i : data.items())
+        {
+            if (i.key() == key)
+                break;
+            if (i.key() != key && !m_stackData.top().empty()
+                && !i.value().is_object())
+            {
+                m_stackData.top().erase(i.key());
+            }
+            if (i.value().is_object())
+            {
+                m_stackKey.push(i.key().c_str());
+                m_isMethodBeenRunLeastOnce = false;
+                return readValueByKeyFromFile(key, i.value());
+            }
+        }
+
+        if (m_stackData.top().is_object() && m_stackData.top().empty())
+        {
+            m_stackData.pop();
+            m_stackData.top().erase(m_stackKey.top());
+            m_stackKey.pop();
+            m_isMethodBeenRunLeastOnce = true;
+            return readValueByKeyFromFile(key, m_stackData.top());
+        }
+
+        return data[key];
+    }
+
+private:
+    std::stack<const char*> m_stackKey;
+    std::stack<json>        m_stackData;
+    bool                    m_isMethodBeenRunLeastOnce;
+};
 
 
 // -------------------- PasrserJson ----------------------
@@ -147,8 +201,6 @@ public:
     Parser(Parser&& other) noexcept = default;
     ~Parser()                       = default;
 
-    string name;
-
     template<typename T>
     [[nodiscard]] T read(const string& name, const string& key)
     {
@@ -158,8 +210,9 @@ public:
 
         if (findFormatFile(name) == m_formatFiles[0])
         {
-            return parser_json.readValueByKeyFromFile<T>(key.c_str(),
-                RetrievesDataFromFile(name.c_str()));
+            ParserJsonFile<T> parser_json_file;
+            return parser_json_file.read_test(key.c_str(),
+                name.c_str());
         }
         else if (findFormatFile(name) == m_formatFiles[1])
         {
@@ -170,17 +223,17 @@ public:
         doWork("Error: ???");
     }
 
-    template<typename T>
-    void write(const string& key, const T& data)
-    {
-        parser_json.test_write(key.c_str(), data);
-    }
-
-    void close(const string& name)
-    {
-        if (m_formatFiles[0] == findFormatFile(name))
-            parser_json.test_close(name.c_str());
-    }
+    // template<typename T>
+    // void write(const string& key, const T& data)
+    // {
+    //     parser_json.test_write(key.c_str(), data);
+    // }
+    //
+    // void close(const string& name)
+    // {
+    //     if (m_formatFiles[0] == findFormatFile(name))
+    //         parser_json.test_close(name.c_str());
+    // }
 
 protected:
     //! rename
@@ -263,12 +316,12 @@ protected:
 
 private:
     static std::vector<string> m_formatFiles;
-    static ParserJson          parser_json;
+    // static ParserJson          parser_json;
 };
 
 std::vector<string> Parser::m_formatFiles{"json", "ini"};
 
-ParserJson Parser::parser_json;
+// ParserJson Parser::parser_json;
 
 
 
@@ -287,9 +340,9 @@ int main()
     std::cout << p.read<int>(fileJson, "gh") << '\n';
     std::cout << p.read<string>(fileJson, "kd") << '\n';
 
-    p.write("kol", 89);
-    p.write("hj", "gyhd"); //! not write -> fix
-    p.close("test.json");
+    // p.write("kol", 89);
+    // p.write("hj", "gyhd"); //! not write -> fix
+    // p.close("test.json");
 
 
     // clg_parserfilescpp::ParserJsonFiles pjf;

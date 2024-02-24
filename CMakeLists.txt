@@ -3,7 +3,7 @@ cmake_minimum_required(VERSION 3.26)
 project(CarLudGine)
 set(CMAKE_CXX_STANDARD 20)
 
-include(FetchContent)
+#include(FetchContent)
 
 ## Curses
 if(WIN32)
@@ -13,7 +13,6 @@ if(WIN32)
     add_library(pdcurses ${PDCURSES_SRC} ${PDCURSES_SRC_WINCON})
     target_compile_options(pdcurses PRIVATE -DPDC_WIDE -DPDC_FORCE_UTF8)
     set(PD_OR_N_CURSES pdcurses)
-    
 else()
     set(CURSES_NEED_NCURSES ON)
     find_package(Curses REQUIRED)
@@ -39,14 +38,6 @@ else()
     include_directories(${YAML_CPP_INCLUDE_DIRS})
 endif()
 
-## OpenAL
-FetchContent_Declare(
-        openalpp
-        GIT_REPOSITORY https://github.com/Laguna1989/OpenALpp.git
-        GIT_TAG master
-)
-FetchContent_MakeAvailable(openalpp)
-
 #configure_file(
 #    ./Setting_game.json
 #    ${CMAKE_CURRENT_BINARY_DIR}/Setting_game.json
@@ -67,28 +58,24 @@ include_directories(include)
 #     src/Module/CursesCpp/Config.cpp
 # )
 
-
-
-add_executable( CarLudGine
-                src/main.cpp
-                src/Module/CursesCpp/Window.cpp
-                src/Module/CursesCpp/StyleWindow.cpp
-                src/Module/CursesCpp/ControlKeyboard.cpp
-                src/Module/Config.cpp
-                include/CarLudGine/ParserJsonFiles.hpp
-                src/Module/ParserFiles/ParserJsonFiles.cpp
-                src/Module/ParserFiles/ParserYamlFiles.cpp
-                include/CarLudGine/ParserYamlFiles.hpp
-                src/Module/ParserFiles/ParserIniFiles.cpp
-                include/CarLudGine/ParserIniFiles.hpp
-                src/Errors/CError.cpp
-                include/CarLudGine/Errors/CError.hpp
+add_executable(CarLudGine
+    src/main.cpp
+    src/Module/CursesCpp/Window.cpp
+    src/Module/CursesCpp/StyleWindow.cpp
+    src/Module/CursesCpp/ControlKeyboard.cpp
+    src/Module/Config.cpp
+    include/CarLudGine/ParserJsonFiles.hpp
+    src/Module/ParserFiles/ParserJsonFiles.cpp
+    src/Module/ParserFiles/ParserYamlFiles.cpp
+    include/CarLudGine/ParserYamlFiles.hpp
+    src/Module/ParserFiles/ParserIniFiles.cpp
+    include/CarLudGine/ParserIniFiles.hpp
+    src/Errors/CError.cpp
+    include/CarLudGine/Errors/CError.hpp
 )
 
 # target_include_directories(CarLudGine PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 target_link_libraries(CarLudGine
-      OpenALpp_Lib
-      libnyquist
     ${PD_OR_N_CURSES}
     ${nlohmann_LIB}
     ${YAML_CPP_LIBRARIES}

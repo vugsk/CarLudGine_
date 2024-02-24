@@ -43,21 +43,15 @@ endif()
 #)
 
 include_directories(include)
-#file(GLOB SRC_ROOT src/main.cpp)
-#file(GLOB SRC_CURSESCPP
-#    src/Module/CursesCpp/*.cpp
-#)
 
-# set(SRC_ROOT 
-#     src/main.cpp
-# )
-
-# set(SRC_CURSESCPP
-#     src/Module/CursesCpp/Window.cpp
-#     src/Module/CursesCpp/Config.cpp
-# )
-
-
+if(CMAKE_CURRENT_SOURCE_DIR STREQUAL CMAKE_SOURCE_DIR)
+    option(CARLUDGINE_TESTS "build tests (or no)" OFF)
+    
+    if (CARLUDGINE_TESTS)
+        enable_testing()
+        add_subdirectory(tests)
+    endif()
+endif()
 
 add_executable(CarLudGine
     src/main.cpp
@@ -74,8 +68,6 @@ add_executable(CarLudGine
     src/Errors/CError.cpp
     include/CarLudGine/Errors/CError.hpp
 )
-
-add_subdirectory(tests)
 
 # target_include_directories(CarLudGine PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 target_link_libraries(CarLudGine

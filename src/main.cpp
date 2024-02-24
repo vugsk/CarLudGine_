@@ -40,6 +40,8 @@ static json RetrievesDataFromFile(const char* name)
 // };
 
 
+
+
 // -------------------- PasrserJson ----------------------
 class ParserJson
 {
@@ -175,8 +177,8 @@ class Parser
 {
 public:
     Parser()                        = default;
-    // Parser(const Parser& other)     = delete;
-    // Parser(Parser&& other) noexcept = delete;
+    Parser(const Parser& other)     = default;
+    Parser(Parser&& other) noexcept = default;
     ~Parser()                       = default;
 
     string name;
@@ -304,7 +306,6 @@ ParserJson Parser::parser_json;
 
 
 
-#define ui(obj) (#obj)
 
 int main()
 {

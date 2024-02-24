@@ -56,16 +56,37 @@ public:
     ~ParserJson()                                      = default;
 
     template<typename T1>
-    [[nodiscard]] T1 readValueByKeyFromFile(const char* key,
-                                            const json& data)
+    [[nodiscard]] T1 readValueByKeyFromFile(const char* key, const json& data)
     {
         if (!m_isMethodBeenRunLeastOnce)
             m_stackData.push(data);
-        if (T1 value; !isSuchKeyExist(key, data, value)
-                      || isThereObjectTheStackAndIsEmpty(key, value))
+
+        for (auto& i : data.items())
         {
-            return value;
+            if (i.key() == key)
+                break;
+            if (i.key() != key && !m_stackData.top().empty()
+                && !i.value().is_object())
+            {
+                m_stackData.top().erase(i.key());
+            }
+            if (i.value().is_object())
+            {
+                m_stackKey.push(i.key().c_str());
+                m_isMethodBeenRunLeastOnce = false;
+                return readValueByKeyFromFile<T1>(key, i.value());
+            }
         }
+
+        if (m_stackData.top().is_object() && m_stackData.top().empty())
+        {
+            m_stackData.pop();
+            m_stackData.top().erase(m_stackKey.top());
+            m_stackKey.pop();
+            m_isMethodBeenRunLeastOnce = true;
+            return readValueByKeyFromFile<T1>(key, m_stackData.top());
+        }
+
         return data[key];
     }
 
@@ -91,48 +112,6 @@ public:
     }
 
 protected:
-    template<typename T1>
-    [[nodiscard]] constexpr bool isSuchKeyExist(
-        const char* key, const json& data, T1& return_value)
-    {
-        for (auto& i : data.items())
-        {
-            if (i.key() == key)
-                break;
-            if (i.key() != key && !m_stackData.top().empty()
-                && !i.value().is_object())
-            {
-                m_stackData.top().erase(i.key());
-            }
-            if (i.value().is_object())
-            {
-                m_stackKey.push(i.key().c_str());
-                m_isMethodBeenRunLeastOnce = false;
-                return_value = readValueByKeyFromFile<T1>(key, i.value());
-                return false;
-            }
-        }
-        return true;
-    }
-
-    template<typename T1>
-    [[nodiscard]] constexpr bool isThereObjectTheStackAndIsEmpty(
-        const char* key, T1& return_value)
-    {
-        if (m_stackData.top().is_object() && m_stackData.top().empty())
-        {
-            m_stackData.pop();
-            m_stackData.top().erase(m_stackKey.top());
-            m_stackKey.pop();
-            m_isMethodBeenRunLeastOnce = true;
-            return_value               = readValueByKeyFromFile<T1>(key,
-                                                                     m_stackData
-                                                                      .top());
-            return true;
-        }
-        return false;
-    }
-
     template<typename T1>
     static void add(json& data, const char* key, const T1& value)
     {

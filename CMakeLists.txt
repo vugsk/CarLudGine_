@@ -3,8 +3,6 @@ cmake_minimum_required(VERSION 3.26)
 project(CarLudGine)
 set(CMAKE_CXX_STANDARD 20)
 
-#include(FetchContent)
-
 ## Curses
 if(WIN32)
     include_directories(${PDCURSES_DIR})
@@ -38,6 +36,7 @@ else()
     include_directories(${YAML_CPP_INCLUDE_DIRS})
 endif()
 
+
 #configure_file(
 #    ./Setting_game.json
 #    ${CMAKE_CURRENT_BINARY_DIR}/Setting_game.json
@@ -58,6 +57,8 @@ include_directories(include)
 #     src/Module/CursesCpp/Config.cpp
 # )
 
+
+
 add_executable(CarLudGine
     src/main.cpp
     src/Module/CursesCpp/Window.cpp
@@ -74,8 +75,11 @@ add_executable(CarLudGine
     include/CarLudGine/Errors/CError.hpp
 )
 
+add_subdirectory(tests)
+
 # target_include_directories(CarLudGine PRIVATE ${CMAKE_CURRENT_BINARY_DIR})
 target_link_libraries(CarLudGine
+    ${Test_CarLudGine}
     ${PD_OR_N_CURSES}
     ${nlohmann_LIB}
     ${YAML_CPP_LIBRARIES}

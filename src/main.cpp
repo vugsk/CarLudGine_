@@ -33,6 +33,13 @@ static json RetrievesDataFromFile(const char* name)
     return data;
 }
 
+// class IParserFile
+// {
+// public:
+//
+// };
+
+
 // -------------------- PasrserJson ----------------------
 class ParserJson
 {

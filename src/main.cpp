@@ -92,21 +92,6 @@ public:
 
 protected:
     template<typename T1>
-    [[nodiscard]] constexpr bool isDataAnObject(const char* key,
-                                                const auto& data,
-                                                T1&         retun_value)
-    {
-        if (data.value().is_object())
-        {
-            m_stackKey.push(data.key().c_str());
-            m_isMethodBeenRunLeastOnce = false;
-            retun_value = readValueByKeyFromFile<T1>(key, data.value());
-            return false;
-        }
-        return true;
-    }
-
-    template<typename T1>
     [[nodiscard]] constexpr bool isSuchKeyExist(
         const char* key, const json& data, T1& return_value)
     {
@@ -119,10 +104,12 @@ protected:
             {
                 m_stackData.top().erase(i.key());
             }
-            if (const bool isDataObject =
-                    isDataAnObject(key, i, return_value); !isDataObject)
+            if (i.value().is_object())
             {
-                return isDataObject;
+                m_stackKey.push(i.key().c_str());
+                m_isMethodBeenRunLeastOnce = false;
+                return_value = readValueByKeyFromFile<T1>(key, i.value());
+                return false;
             }
         }
         return true;

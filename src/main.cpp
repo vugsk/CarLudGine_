@@ -25,13 +25,57 @@ private:
 
 typedef nlohmann::json json;
 
-static json RetrievesDataFromFile(const char* name)
+[[nodiscard]] static json RetrievesDataFromFile(const char* name)
 {
     std::ifstream file(name);
     json          data = json::parse(file);
     file.close();
     return data;
 }
+
+namespace
+{
+    std::stack<const char*> m_stackKey;
+    std::stack<json>        m_stackData;
+    bool                    m_isMethodBeenRunLeastOnce;
+}
+
+template<typename T>
+[[nodiscard]] T ReadValueByKeyFromFile(const char* key, const json& data)
+{
+    if (!m_isMethodBeenRunLeastOnce)
+        m_stackData.push(data);
+
+    for (auto& i : data.items())
+    {
+        if (i.key() == key)
+            break;
+        if (i.key() != key && !m_stackData.top().empty()
+            && !i.value().is_object())
+        {
+            m_stackData.top().erase(i.key());
+        }
+        if (i.value().is_object())
+        {
+            m_stackKey.push(i.key().c_str());
+            m_isMethodBeenRunLeastOnce = false;
+            return ReadValueByKeyFromFile<T>(key, i.value());
+        }
+    }
+
+    if (m_stackData.top().is_object() && m_stackData.top().empty())
+    {
+        m_stackData.pop();
+        m_stackData.top().erase(m_stackKey.top());
+        m_stackKey.pop();
+        m_isMethodBeenRunLeastOnce = true;
+        return ReadValueByKeyFromFile<T>(key, m_stackData.top());
+    }
+
+    return data[key];
+}
+
+
 
 template<typename T>
 class IParserFile
@@ -94,6 +138,9 @@ private:
     std::stack<json>        m_stackData;
     bool                    m_isMethodBeenRunLeastOnce;
 };
+
+
+
 
 
 // -------------------- PasrserJson ----------------------
@@ -210,9 +257,9 @@ public:
 
         if (findFormatFile(name) == m_formatFiles[0])
         {
-            ParserJsonFile<T> parser_json_file;
-            return parser_json_file.read_test(key.c_str(),
-                name.c_str());
+            // ParserJsonFile<T> parser_json_file;
+            return ReadValueByKeyFromFile<T>(key.c_str(),
+                RetrievesDataFromFile(name.c_str()));
         }
         else if (findFormatFile(name) == m_formatFiles[1])
         {
